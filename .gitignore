@@ -10,3 +10,4 @@
 # Ignore signing config
 keystore.properties
 *jks
+local.properties
