@@ -6,3 +6,7 @@
 /build
 /captures
 .externalNativeBuild
+
+# Ignore signing config
+keystore.properties
+*jks
