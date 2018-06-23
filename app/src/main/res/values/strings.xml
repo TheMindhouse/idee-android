@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Idée</string>
+
+    <!--Errors-->
+    <string name="error_unknown">Something went wrong :(</string>
+
 </resources>
