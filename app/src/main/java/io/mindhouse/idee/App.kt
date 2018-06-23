@@ -2,10 +2,11 @@ package io.mindhouse.idee
 
 import android.app.Activity
 import android.app.Application
-import io.mindhouse.idee.di.component.DaggerAppComponent
+import com.google.firebase.FirebaseApp
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
+import io.mindhouse.idee.di.component.DaggerAppComponent
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -20,14 +21,12 @@ open class App : Application(), HasActivityInjector {
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
 
-    companion object {
-
-    }
-
     override fun onCreate() {
         super.onCreate()
         initDI()
         initTimber()
+        initFirebase()
+        // TODO: 23/06/2018 Crashlytics
     }
 
     override fun activityInjector(): AndroidInjector<Activity> = dispatchingAndroidInjector
@@ -44,5 +43,9 @@ open class App : Application(), HasActivityInjector {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+    }
+
+    private fun initFirebase() {
+        FirebaseApp.initializeApp(this)
     }
 }
