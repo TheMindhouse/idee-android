@@ -21,7 +21,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun startProperActivity() {
-        if (!authorizeRepository.isLoggedIn()) {
+        if (!authorizeRepository.isLoggedIn) {
             val intent = AuthActivity.newIntent(this)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
