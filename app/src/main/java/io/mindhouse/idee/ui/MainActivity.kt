@@ -1,10 +1,10 @@
 package io.mindhouse.idee.ui
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import io.mindhouse.idee.R
+import io.mindhouse.idee.ui.base.DefaultActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : DefaultActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
