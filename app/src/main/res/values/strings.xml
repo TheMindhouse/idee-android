@@ -7,5 +7,6 @@
     <!--Config-->
     <string name="facebook_app_id">2310649462278870</string>
     <string name="fb_login_protocol_scheme">fb2310649462278870</string>
+    <string name="google_client_id">394685923584-o7a74m9rc93nlmonepjdg2nfuvbqogbo.apps.googleusercontent.com</string>
 
 </resources>

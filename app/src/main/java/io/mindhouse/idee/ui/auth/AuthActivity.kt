@@ -10,24 +10,42 @@ import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginResult
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import io.mindhouse.idee.R
 import io.mindhouse.idee.data.AuthorizeRepository
 import io.mindhouse.idee.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_auth.*
 import timber.log.Timber
 
+
 class AuthActivity : BaseActivity<AuthViewState, AuthViewModel>() {
 
     companion object {
+        private const val RC_SIGN_IN = 0xdd
         fun newIntent(context: Context): Intent = Intent(context, AuthActivity::class.java)
     }
 
     private val fbCallbackManager = CallbackManager.Factory.create()
+    private lateinit var googleSignInClient: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
+
         initFbLogin()
+        initGoogleLogin()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            viewModel.onGoogleToken(task)
+        } else {
+            fbCallbackManager.onActivityResult(requestCode, resultCode, data)
+        }
     }
 
     override fun render(state: AuthViewState) {
@@ -47,6 +65,20 @@ class AuthActivity : BaseActivity<AuthViewState, AuthViewModel>() {
 
     //==========================================================================
 
+    private fun initGoogleLogin() {
+        val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.google_client_id))
+                .requestEmail()
+                .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, options)
+
+        googleLoginButton.setOnClickListener {
+            val intent = googleSignInClient.signInIntent
+            startActivityForResult(intent, RC_SIGN_IN)
+        }
+    }
+
     private fun initFbLogin() {
         facebookLoginButton.setReadPermissions(AuthorizeRepository.FACEBOOK_PERMISSIONS)
         facebookLoginButton.registerCallback(fbCallbackManager, object : FacebookCallback<LoginResult> {
@@ -63,11 +95,6 @@ class AuthActivity : BaseActivity<AuthViewState, AuthViewModel>() {
                 renderError(message)
             }
         })
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        fbCallbackManager.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun createViewModel() =

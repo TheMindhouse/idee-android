@@ -1,9 +1,8 @@
 package io.mindhouse.idee.data
 
 import com.facebook.AccessToken
-import com.google.firebase.auth.FacebookAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.*
 import durdinapps.rxfirebase2.RxFirebaseAuth
 import io.mindhouse.idee.data.model.User
 import io.reactivex.Single
@@ -31,8 +30,17 @@ class AuthorizeRepository @Inject constructor(
     val isLoggedIn: Boolean get() = currentUser != null
 
     fun signInWithFacebook(token: AccessToken): Single<User> {
-        val provider = FacebookAuthProvider.getCredential(token.token)
-        return RxFirebaseAuth.signInWithCredential(auth, provider)
+        val credential = FacebookAuthProvider.getCredential(token.token)
+        return signInWithCredential(credential)
+    }
+
+    fun signInWithGoogle(account: GoogleSignInAccount): Single<User> {
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+        return signInWithCredential(credential)
+    }
+
+    private fun signInWithCredential(credential: AuthCredential): Single<User> {
+        return RxFirebaseAuth.signInWithCredential(auth, credential)
                 .filter { it.user != null }
                 .toSingle()
                 .map { it.user.toUser() }
