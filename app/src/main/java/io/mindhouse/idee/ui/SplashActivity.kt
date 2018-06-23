@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import dagger.android.AndroidInjection
 import io.mindhouse.idee.data.AuthorizeRepository
 import io.mindhouse.idee.ui.auth.AuthActivity
+import timber.log.Timber
 import javax.inject.Inject
 
 class SplashActivity : AppCompatActivity() {
@@ -21,14 +22,16 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun startProperActivity() {
-        if (!authorizeRepository.isLoggedIn) {
-            val intent = AuthActivity.newIntent(this)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-
-            startActivity(intent)
-
+        val intent = if (!authorizeRepository.isLoggedIn) {
+            AuthActivity.newIntent(this)
         } else {
-            TODO("Not implemented yet")
+            val user = authorizeRepository.currentUser
+            Timber.d("Logged in as: $user")
+
+            MainActivity.newIntent(this)
         }
+
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
     }
 }

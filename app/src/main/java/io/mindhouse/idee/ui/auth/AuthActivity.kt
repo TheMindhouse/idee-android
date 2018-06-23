@@ -15,6 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import io.mindhouse.idee.R
 import io.mindhouse.idee.data.AuthorizeRepository
+import io.mindhouse.idee.ui.MainActivity
 import io.mindhouse.idee.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_auth.*
 import timber.log.Timber
@@ -52,14 +53,19 @@ class AuthActivity : BaseActivity<AuthViewState, AuthViewModel>() {
         TransitionManager.beginDelayedTransition(content)
         if (state.isLoading) {
             facebookLoginButton.visibility = View.GONE
+            googleLoginButton.visibility = View.GONE
             progressBar.visibility = View.VISIBLE
         } else {
             facebookLoginButton.visibility = View.VISIBLE
+            googleLoginButton.visibility = View.VISIBLE
             progressBar.visibility = View.GONE
         }
 
         if (state.isLoggedId) {
-            Timber.e("Logged in but not implemented!!")
+            val intent = MainActivity.newIntent(this)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+            startActivity(intent)
         }
     }
 
