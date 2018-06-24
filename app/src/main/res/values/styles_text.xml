@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextViewStyle">
+        <item name="android:textAppearance">@style/TextDefault</item>
+    </style>
+
+    <style name="TextDefault" parent="@android:style/TextAppearance.Small">
+        <item name="android:fontFamily">@font/catamaran</item>
+    </style>
+
+</resources>
