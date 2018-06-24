@@ -1,10 +1,16 @@
 package io.mindhouse.idee.ui.auth
 
+import android.animation.Animator
+import android.animation.ArgbEvaluator
+import android.animation.TimeAnimator
+import android.animation.ValueAnimator
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.support.transition.TransitionManager
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.WindowManager
 import com.facebook.CallbackManager
@@ -31,6 +37,7 @@ class AuthActivity : BaseActivity<AuthViewState, AuthViewModel>() {
 
     private val fbCallbackManager = CallbackManager.Factory.create()
     private lateinit var googleSignInClient: GoogleSignInClient
+    private var gradientAnimator: Animator? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +46,16 @@ class AuthActivity : BaseActivity<AuthViewState, AuthViewModel>() {
 
         initFbLogin()
         initGoogleLogin()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        animateGradient()
+    }
+
+    override fun onStop() {
+        gradientAnimator?.end()
+        super.onStop()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -104,6 +121,34 @@ class AuthActivity : BaseActivity<AuthViewState, AuthViewModel>() {
             }
         })
     }
+
+    private fun animateGradient() {
+        val start = ContextCompat.getColor(this, R.color.turquoise)
+        val mid = ContextCompat.getColor(this, R.color.green)
+        val end = ContextCompat.getColor(this, R.color.lime)
+        val gradient = content.background as GradientDrawable
+
+        val evaluator = ArgbEvaluator()
+        val animator = TimeAnimator.ofFloat(0.0f, 1.0f)
+
+        gradientAnimator?.end()
+        gradientAnimator = animator
+
+        animator.duration = 3500
+        animator.repeatCount = ValueAnimator.INFINITE
+        animator.repeatMode = ValueAnimator.REVERSE
+        animator.addUpdateListener {
+            val fraction = it.animatedFraction
+            val newStart = evaluator.evaluate(fraction, start, end) as Int
+            val newMid = evaluator.evaluate(fraction, mid, start) as Int
+            val newEnd = evaluator.evaluate(fraction, end, mid) as Int
+
+            gradient.colors = intArrayOf(newStart, newMid, newEnd)
+        }
+
+        animator.start()
+    }
+
 
     override fun createViewModel() =
             ViewModelProviders.of(this, viewModelFactory)[AuthViewModel::class.java]
