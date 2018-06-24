@@ -3,6 +3,7 @@ package io.mindhouse.idee
 import android.app.Activity
 import android.app.Application
 import com.google.firebase.FirebaseApp
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -47,5 +48,9 @@ open class App : Application(), HasActivityInjector {
 
     private fun initFirebase() {
         FirebaseApp.initializeApp(this)
+
+        if (BuildConfig.DEBUG) {
+            FirebaseFirestore.setLoggingEnabled(true)
+        }
     }
 }
