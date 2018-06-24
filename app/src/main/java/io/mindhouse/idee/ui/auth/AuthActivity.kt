@@ -23,12 +23,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import io.mindhouse.idee.R
 import io.mindhouse.idee.data.AuthorizeRepository
 import io.mindhouse.idee.ui.MainActivity
-import io.mindhouse.idee.ui.base.BaseActivity
+import io.mindhouse.idee.ui.base.MvvmActivity
 import kotlinx.android.synthetic.main.activity_auth.*
 import timber.log.Timber
 
 
-class AuthActivity : BaseActivity<AuthViewState, AuthViewModel>() {
+class AuthActivity : MvvmActivity<AuthViewState, AuthViewModel>() {
 
     companion object {
         private const val RC_SIGN_IN = 0xdd
