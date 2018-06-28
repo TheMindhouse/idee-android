@@ -2,5 +2,6 @@
 <resources>
 
     <dimen name="my_account_avatar_size">64dp</dimen>
+    <dimen name="nav_drawer_width">280dp</dimen>
 
 </resources>

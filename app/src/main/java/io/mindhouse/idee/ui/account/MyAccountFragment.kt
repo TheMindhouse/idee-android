@@ -20,6 +20,10 @@ class MyAccountFragment : MvvmFragment<MyAccountViewState, MyAccountViewModel>()
 
     private val adapter = BoardsRecyclerAdapter()
 
+    companion object {
+        fun newInstance(): MyAccountFragment = MyAccountFragment()
+    }
+
     var onBoardSelectedListener: ((String) -> Unit)? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =

@@ -6,7 +6,6 @@ import io.mindhouse.idee.data.BoardsRepository
 import io.mindhouse.idee.data.model.Board
 import io.mindhouse.idee.di.qualifier.IOScheduler
 import io.mindhouse.idee.ui.base.BaseViewModel
-import io.mindhouse.idee.utils.RetryWithDelay
 import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
@@ -44,7 +43,6 @@ class MyAccountViewModel @Inject constructor(
                 )
     }
 
-
     //==========================================================================
     // private
     //==========================================================================
@@ -55,7 +53,7 @@ class MyAccountViewModel @Inject constructor(
         val disposable = boardsRepository.observeBoards()
                 .subscribeOn(ioScheduler)
                 .map { it.map { it.toViewState() } }
-                .retryWhen(RetryWithDelay(0, 3000))
+//                .retryWhen(RetryWithDelay(0, 3000))
                 .subscribeBy(
                         onNext = ::onBoards,
                         onError = ::onBoardsObserveError
