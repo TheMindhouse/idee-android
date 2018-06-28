@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Idée</string>
 
+    <!--My Account-->
+    <string name="create_board">Create new board</string>
+    <string name="user_no_name">Anonymous user</string>
+
     <!--Errors-->
     <string name="error_unknown">Something went wrong :(</string>
 

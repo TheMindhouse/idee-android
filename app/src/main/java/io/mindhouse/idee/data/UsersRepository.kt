@@ -26,7 +26,8 @@ class UsersRepository @Inject constructor() {
 
     fun findUser(id: String): Maybe<User> {
         val doc = db.collection("users").document(id)
-        return RxFirestore.getDocument(doc, User::class.java)
+        return RxFirestore.getDocument(doc)
+                .map { it.toObject(User::class.java)?.copy(id = it.id) }
     }
 
 }

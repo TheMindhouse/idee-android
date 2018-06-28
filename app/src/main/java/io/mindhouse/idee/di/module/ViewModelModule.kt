@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import io.mindhouse.idee.di.utils.ViewModelFactory
 import io.mindhouse.idee.di.utils.ViewModelKey
+import io.mindhouse.idee.ui.account.MyAccountViewModel
 import io.mindhouse.idee.ui.auth.AuthViewModel
 
 @Module
@@ -16,6 +17,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(AuthViewModel::class)
     abstract fun authViewModel(viewModel: AuthViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MyAccountViewModel::class)
+    abstract fun myAccountViewModel(viewModel: MyAccountViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory

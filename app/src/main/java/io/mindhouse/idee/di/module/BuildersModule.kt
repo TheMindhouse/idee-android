@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import io.mindhouse.idee.ui.MainActivity
 import io.mindhouse.idee.ui.SplashActivity
+import io.mindhouse.idee.ui.account.MyAccountFragment
 import io.mindhouse.idee.ui.auth.AuthActivity
 
 /**
@@ -22,5 +23,8 @@ abstract class BuildersModule {
 
     @ContributesAndroidInjector
     abstract fun bindMainActivity(): MainActivity
+
+    @ContributesAndroidInjector
+    abstract fun bindMyAccountFragment(): MyAccountFragment
 
 }
