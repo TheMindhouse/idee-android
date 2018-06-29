@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.squareup.picasso.Picasso
 import io.mindhouse.idee.R
+import io.mindhouse.idee.data.model.Board
 import io.mindhouse.idee.ui.base.MvvmFragment
+import io.mindhouse.idee.ui.board.BoardActivity
 import kotlinx.android.synthetic.main.fragment_my_account.*
 
 /**
@@ -24,7 +26,7 @@ class MyAccountFragment : MvvmFragment<MyAccountViewState, MyAccountViewModel>()
         fun newInstance(): MyAccountFragment = MyAccountFragment()
     }
 
-    var onBoardSelectedListener: ((String) -> Unit)? = null
+    var onBoardSelectedListener: ((Board) -> Unit)? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_my_account, container, false)
@@ -36,12 +38,12 @@ class MyAccountFragment : MvvmFragment<MyAccountViewState, MyAccountViewModel>()
         recyclerView.layoutManager = lm
 
         adapter.onItemClickedListener = { boardViewState, _ ->
-            onBoardSelectedListener?.invoke(boardViewState.id)
+            onBoardSelectedListener?.invoke(boardViewState.board)
         }
 
         addBoardButton.setOnClickListener {
-            //todo change name!
-            viewModel.createNewBoard("Moja tablica bjacz!!")
+            val intent = BoardActivity.newIntent(view.context)
+            startActivity(intent)
         }
     }
 

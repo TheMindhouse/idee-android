@@ -5,6 +5,16 @@
     <string name="create_board">Create new board</string>
     <string name="user_no_name">Anonymous user</string>
 
+    <!--Board management-->
+    <string name="create_board_title">Create board</string>
+    <string name="board_name">Board name</string>
+    <string name="share_options">Share options</string>
+    <string name="add_email_to_share">Add e-mail to share</string>
+
+    <!--Generic-->
+    <string name="save">Save</string>
+    <string name="ok">OK</string>
+
     <!--Errors-->
     <string name="error_unknown">Something went wrong :(</string>
 

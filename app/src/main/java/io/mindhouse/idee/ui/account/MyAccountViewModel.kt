@@ -1,6 +1,5 @@
 package io.mindhouse.idee.ui.account
 
-import io.mindhouse.idee.ExceptionHandler
 import io.mindhouse.idee.data.AuthorizeRepository
 import io.mindhouse.idee.data.BoardsRepository
 import io.mindhouse.idee.data.model.Board
@@ -20,7 +19,6 @@ import javax.inject.Inject
 class MyAccountViewModel @Inject constructor(
         private val authorizeRepository: AuthorizeRepository,
         private val boardsRepository: BoardsRepository,
-        private val exceptionHandler: ExceptionHandler,
         @IOScheduler private val ioScheduler: Scheduler
 ) : BaseViewModel<MyAccountViewState>() {
 
@@ -29,18 +27,6 @@ class MyAccountViewModel @Inject constructor(
 
     init {
         observeBoards()
-    }
-
-    fun createNewBoard(name: String) {
-        boardsRepository.createBoard(name)
-                .subscribeOn(ioScheduler)
-                .subscribeBy(
-                        onSuccess = {
-                            //Change should be observed, no need to do anything
-                            Timber.i("Successfully created board: $name")
-                        },
-                        onError = ::onCreateBoardError
-                )
     }
 
     //==========================================================================
@@ -64,14 +50,7 @@ class MyAccountViewModel @Inject constructor(
     }
 
     private fun onBoards(boards: List<BoardViewState>) {
-        val newState = getState().copy(boards = boards)
-        postState(newState)
-    }
-
-    private fun onCreateBoardError(throwable: Throwable) {
-        Timber.e(throwable, "Error creating new board!")
-        val msg = exceptionHandler.getErrorMessage(throwable)
-        val newState = getState().copy(errorMessage = msg)
+        val newState = state.copy(boards = boards)
         postState(newState)
     }
 
@@ -82,7 +61,6 @@ class MyAccountViewModel @Inject constructor(
 
     private fun Board.toViewState(): BoardViewState {
         val myId = authorizeRepository.currentUser?.id
-        return BoardViewState(this.id, this.name, myId == this.ownerId,
-                !this.roles.isEmpty())
+        return BoardViewState(this, myId == this.ownerId, !this.roles.isEmpty())
     }
 }

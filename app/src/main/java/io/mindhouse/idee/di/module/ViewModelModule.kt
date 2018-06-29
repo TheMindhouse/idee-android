@@ -9,6 +9,7 @@ import io.mindhouse.idee.di.utils.ViewModelFactory
 import io.mindhouse.idee.di.utils.ViewModelKey
 import io.mindhouse.idee.ui.account.MyAccountViewModel
 import io.mindhouse.idee.ui.auth.AuthViewModel
+import io.mindhouse.idee.ui.board.EditBoardViewModel
 
 @Module
 abstract class ViewModelModule {
@@ -22,6 +23,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MyAccountViewModel::class)
     abstract fun myAccountViewModel(viewModel: MyAccountViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(EditBoardViewModel::class)
+    abstract fun editBoardViewModel(viewModel: EditBoardViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory

@@ -6,6 +6,7 @@ import android.os.Bundle
 import io.mindhouse.idee.R
 import io.mindhouse.idee.ui.account.MyAccountFragment
 import io.mindhouse.idee.ui.base.DefaultActivity
+import io.mindhouse.idee.ui.board.BoardActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : DefaultActivity() {
@@ -22,13 +23,18 @@ class MainActivity : DefaultActivity() {
     }
 
     private fun initNavigation() {
-        val fragment = supportFragmentManager.findFragmentById(R.id.navContainer)
+        val fragment = supportFragmentManager.findFragmentById(R.id.navContainer) as? MyAccountFragment
                 ?: MyAccountFragment.newInstance()
 
         if (!fragment.isAdded) {
             supportFragmentManager.beginTransaction()
                     .add(R.id.navContainer, fragment)
                     .commit()
+        }
+
+        fragment.onBoardSelectedListener = { board ->
+            val intent = BoardActivity.newIntent(this, board)
+            startActivity(intent)
         }
     }
 }

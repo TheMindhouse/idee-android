@@ -6,6 +6,8 @@ import io.mindhouse.idee.ui.MainActivity
 import io.mindhouse.idee.ui.SplashActivity
 import io.mindhouse.idee.ui.account.MyAccountFragment
 import io.mindhouse.idee.ui.auth.AuthActivity
+import io.mindhouse.idee.ui.board.BoardActivity
+import io.mindhouse.idee.ui.board.EditBoardFragment
 
 /**
  * Binds all sub-components withing the app
@@ -25,6 +27,12 @@ abstract class BuildersModule {
     abstract fun bindMainActivity(): MainActivity
 
     @ContributesAndroidInjector
+    abstract fun bindBoardActivity(): BoardActivity
+
+    @ContributesAndroidInjector
     abstract fun bindMyAccountFragment(): MyAccountFragment
+
+    @ContributesAndroidInjector
+    abstract fun bindEditBoardFragment(): EditBoardFragment
 
 }

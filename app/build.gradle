@@ -64,6 +64,11 @@ android {
             }
         }
     }
+
+    //We use Parcelable from Kotlin extensions
+    androidExtensions {
+        experimental = true
+    }
 }
 
 dependencies {

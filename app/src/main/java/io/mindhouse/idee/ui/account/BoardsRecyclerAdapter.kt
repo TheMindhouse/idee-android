@@ -22,7 +22,7 @@ class BoardsRecyclerAdapter : ArrayRecyclerAdapter<BoardViewState, BoardsRecycle
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val board = data[position]
+        val board = data[position].board
         holder.boardName.text = board.name
     }
 
