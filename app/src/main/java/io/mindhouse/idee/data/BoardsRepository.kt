@@ -54,6 +54,20 @@ class BoardsRepository @Inject constructor(
         return observeBoardQuery(ownedRef)
     }
 
+    fun getMyBoards(): Single<List<Board>> {
+        val me = authorizeRepository.currentUser
+                ?: return Single.error(IllegalArgumentException("Not logged in!"))
+
+        val ownedRef = db.collection("boards").whereEqualTo("ownerId", me.id)
+        return RxFirestore.getCollection(ownedRef)
+                .map {
+                    it.documents.mapNotNull {
+                        it.toObject(Board::class.java)?.copy(id = it.id)
+                    }
+                }
+                .toSingle(emptyList())
+    }
+
     fun updateBoard(board: Board): Completable {
         val docRef = db.collection("boards").document(board.id)
         return RxFirestore.setDocument(docRef, board, SetOptions.merge())

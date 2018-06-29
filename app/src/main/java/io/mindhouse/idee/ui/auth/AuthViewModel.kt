@@ -1,14 +1,17 @@
 package io.mindhouse.idee.ui.auth
 
+import android.content.Context
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import io.mindhouse.idee.ExceptionHandler
+import io.mindhouse.idee.R
 import io.mindhouse.idee.data.AuthorizeRepository
-import io.mindhouse.idee.data.model.User
+import io.mindhouse.idee.data.BoardsRepository
 import io.mindhouse.idee.di.qualifier.IOScheduler
 import io.mindhouse.idee.ui.base.BaseViewModel
+import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.rxkotlin.subscribeBy
 import javax.inject.Inject
@@ -21,20 +24,25 @@ import javax.inject.Inject
  */
 
 class AuthViewModel @Inject constructor(
+        context: Context,
         private val authorizeRepository: AuthorizeRepository,
+        private val boardsRepository: BoardsRepository,
         @IOScheduler private val ioScheduler: Scheduler,
         private val exceptionHandler: ExceptionHandler
 ) : BaseViewModel<AuthViewState>() {
 
     override val initialState = AuthViewState(false, authorizeRepository.isLoggedIn, null)
 
+    private val defaultBoardName = context.getString(R.string.default_board_name)
+
     fun onFacebookToken(fbToken: LoginResult) {
         postState(AuthViewState(true, false, null))
 
         val disposable = authorizeRepository.signInWithFacebook(fbToken.accessToken)
                 .subscribeOn(ioScheduler)
+                .flatMapCompletable { createBoardIfNecessary() }
                 .subscribeBy(
-                        onSuccess = ::onLoggedIn,
+                        onComplete = ::onLoggedIn,
                         onError = ::onError
                 )
         addDisposable(disposable)
@@ -47,8 +55,9 @@ class AuthViewModel @Inject constructor(
 
             val disposable = authorizeRepository.signInWithGoogle(account)
                     .subscribeOn(ioScheduler)
+                    .flatMapCompletable { createBoardIfNecessary() }
                     .subscribeBy(
-                            onSuccess = ::onLoggedIn,
+                            onComplete = ::onLoggedIn,
                             onError = ::onError
                     )
             addDisposable(disposable)
@@ -58,7 +67,19 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    private fun onLoggedIn(user: User) {
+    private fun createBoardIfNecessary(): Completable {
+        return boardsRepository.getMyBoards()
+                .flatMapCompletable {
+                    if (!it.isEmpty()) {
+                        Completable.complete()
+                    } else {
+                        boardsRepository.createBoard(defaultBoardName)
+                                .toCompletable()
+                    }
+                }
+    }
+
+    private fun onLoggedIn() {
         postState(AuthViewState(false, true, null))
     }
 

@@ -10,6 +10,7 @@
     <string name="board_name">Board name</string>
     <string name="share_options">Share options</string>
     <string name="add_email_to_share">Add e-mail to share</string>
+    <string name="default_board_name">My boards</string>
 
     <!--Generic-->
     <string name="save">Save</string>
