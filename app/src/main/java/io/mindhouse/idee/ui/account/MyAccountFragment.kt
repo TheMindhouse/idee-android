@@ -26,6 +26,7 @@ class MyAccountFragment : MvvmFragment<MyAccountViewState, MyAccountViewModel>()
         fun newInstance(): MyAccountFragment = MyAccountFragment()
     }
 
+    private var initialSelected = false
     var onBoardSelectedListener: ((Board) -> Unit)? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
@@ -54,6 +55,10 @@ class MyAccountFragment : MvvmFragment<MyAccountViewState, MyAccountViewModel>()
         }
 
         adapter.setItems(state.boards)
+        if (!initialSelected && state.boards.isNotEmpty()) {
+            initialSelected = true
+            onBoardSelectedListener?.invoke(state.boards[0].board)
+        }
     }
 
     override fun createViewModel() =
