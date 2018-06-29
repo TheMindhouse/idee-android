@@ -5,6 +5,7 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import durdinapps.rxfirebase2.RxFirestore
 import io.mindhouse.idee.data.model.Board
+import io.mindhouse.idee.data.model.Idea
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
@@ -89,6 +90,22 @@ class BoardsRepository @Inject constructor(
         return RxFirestore.getDocument(docRef)
                 .map { it.toObject(Board::class.java)?.copy(id = it.id) }
     }
+
+    //==========================================================================
+    // ideas
+    //==========================================================================
+
+    fun observeIdeas(boardId: String): Flowable<List<Idea>> {
+        val docRef = db.collection("boards").document(boardId).collection("ideas")
+        return RxFirestore.observeQueryRef(docRef)
+                .map {
+                    it.documents.mapNotNull {
+                        it.toObject(Idea::class.java)?.copy(id = it.id)
+                    }
+                }
+    }
+
+    //==========================================================================
 
     private fun observeBoardQuery(query: Query): Flowable<List<Board>> {
         return RxFirestore.observeQueryRef(query)

@@ -3,23 +3,56 @@ package io.mindhouse.idee.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import io.mindhouse.idee.R
+import io.mindhouse.idee.data.model.Board
+import io.mindhouse.idee.data.model.Idea
 import io.mindhouse.idee.ui.account.MyAccountFragment
 import io.mindhouse.idee.ui.base.DefaultActivity
-import io.mindhouse.idee.ui.board.BoardActivity
+import io.mindhouse.idee.ui.idea.list.IdeaListFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : DefaultActivity() {
+class MainActivity : DefaultActivity(), IdeaListFragment.FragmentCallbacks {
 
     companion object {
         fun newIntent(context: Context) = Intent(context, MainActivity::class.java)
     }
 
+    private lateinit var ideaListFragment: IdeaListFragment
+    private var selectedBoard: Board? = null
+        set(value) {
+            field = value
+            ideaListFragment.board = value
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
         initNavigation()
+        initFragment()
+    }
+
+    override fun onIdeaSelected(idea: Idea) {
+        Toast.makeText(this, "Idea clicked: $idea", Toast.LENGTH_SHORT).show()
+    }
+
+    //==========================================================================
+    // private
+    //==========================================================================
+
+    private fun initFragment() {
+        ideaListFragment = supportFragmentManager.findFragmentById(R.id.container) as? IdeaListFragment
+                ?: IdeaListFragment.newInstance(selectedBoard)
+
+        if (!ideaListFragment.isAdded) {
+            supportFragmentManager.beginTransaction()
+                    .add(R.id.container, ideaListFragment)
+                    .commit()
+        }
+
+        ideaListFragment.fragmentCallbacks = this
     }
 
     private fun initNavigation() {
@@ -33,8 +66,8 @@ class MainActivity : DefaultActivity() {
         }
 
         fragment.onBoardSelectedListener = { board ->
-            val intent = BoardActivity.newIntent(this, board)
-            startActivity(intent)
+            selectedBoard = board
+            drawerLayout.closeDrawers()
         }
     }
 }

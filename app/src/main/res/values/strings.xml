@@ -12,6 +12,9 @@
     <string name="add_email_to_share">Add e-mail to share</string>
     <string name="default_board_name">My ideas</string>
 
+    <!--Ideas-->
+    <string name="select_board">Select a board to see ideas</string>
+
     <!--Generic-->
     <string name="save">Save</string>
     <string name="ok">OK</string>
