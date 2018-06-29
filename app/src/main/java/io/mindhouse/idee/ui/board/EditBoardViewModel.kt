@@ -21,7 +21,7 @@ class EditBoardViewModel @Inject constructor(
         @IOScheduler private val ioScheduler: Scheduler
 ) : BaseViewModel<EditBoardViewState>() {
 
-    override val initialState = EditBoardViewState(false, null)
+    override val initialState = EditBoardViewState(false, false, null)
 
     fun createNewBoard(name: String) {
         val state = state.copy(isLoading = true)
@@ -31,7 +31,7 @@ class EditBoardViewModel @Inject constructor(
                 .subscribeBy(
                         onSuccess = {
                             //Change should be observed, no need to do anything
-                            postState(state.copy(isLoading = false))
+                            postState(state.copy(isLoading = false, isSaved = true))
                             Timber.i("Successfully created board: $name")
                         },
                         onError = { onError(it, "creating board") }
@@ -44,7 +44,7 @@ class EditBoardViewModel @Inject constructor(
         boardsRepository.updateBoard(board)
                 .subscribeOn(ioScheduler)
                 .subscribeBy(
-                        onComplete = { postState(state.copy(isLoading = false)) },
+                        onComplete = { postState(state.copy(isLoading = false, isSaved = true)) },
                         onError = { onError(it, "updating board") }
                 )
     }

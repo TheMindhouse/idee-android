@@ -2,6 +2,7 @@ package io.mindhouse.idee.ui.board
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +31,8 @@ class EditBoardFragment : MvvmFragment<EditBoardViewState, EditBoardViewModel>()
             return fragment
         }
     }
+
+    var fragmentCallbacks: FragmentCallbacks? = null
 
     private val board: Board? by lazy { arguments?.getParcelable(KEY_BOARD) as? Board }
 
@@ -64,12 +67,17 @@ class EditBoardFragment : MvvmFragment<EditBoardViewState, EditBoardViewModel>()
     }
 
     override fun render(state: EditBoardViewState) {
+        TransitionManager.beginDelayedTransition(view as ViewGroup)
         if (state.isLoading) {
             progressBar.visibility = View.VISIBLE
             saveButton.isEnabled = false
         } else {
             progressBar.visibility = View.GONE
             updateView()
+        }
+
+        if (state.isSaved) {
+            fragmentCallbacks?.onBoardSaved()
         }
     }
 
@@ -86,4 +94,8 @@ class EditBoardFragment : MvvmFragment<EditBoardViewState, EditBoardViewModel>()
 
     override fun createViewModel() =
             ViewModelProviders.of(this, viewModelFactory)[EditBoardViewModel::class.java]
+
+    interface FragmentCallbacks {
+        fun onBoardSaved()
+    }
 }

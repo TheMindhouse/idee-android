@@ -9,5 +9,6 @@ import io.mindhouse.idee.ui.base.ViewState
  */
 data class EditBoardViewState(
         val isLoading: Boolean,
+        val isSaved: Boolean,
         override val errorMessage: String? = null
 ) : ViewState
