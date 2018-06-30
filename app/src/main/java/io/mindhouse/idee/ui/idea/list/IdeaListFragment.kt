@@ -12,6 +12,7 @@ import io.mindhouse.idee.data.model.Board
 import io.mindhouse.idee.data.model.Idea
 import io.mindhouse.idee.ui.base.MvvmFragment
 import io.mindhouse.idee.ui.idea.IdeaActivity
+import kotlinx.android.synthetic.main.fragment_idea_list.*
 
 /**
  * Created by kmisztal on 29/06/2018.

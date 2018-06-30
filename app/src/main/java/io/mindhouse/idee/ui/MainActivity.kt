@@ -10,6 +10,7 @@ import io.mindhouse.idee.ui.account.MyAccountFragment
 import io.mindhouse.idee.ui.base.DefaultActivity
 import io.mindhouse.idee.ui.idea.IdeaActivity
 import io.mindhouse.idee.ui.idea.list.IdeaListFragment
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : DefaultActivity(), IdeaListFragment.FragmentCallbacks {
 

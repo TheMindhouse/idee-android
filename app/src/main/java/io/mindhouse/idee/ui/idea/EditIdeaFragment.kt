@@ -13,6 +13,7 @@ import io.mindhouse.idee.data.model.Idea
 import io.mindhouse.idee.ui.base.MvvmFragment
 import io.mindhouse.idee.utils.SimpleOnSeekbarChangeListner
 import io.mindhouse.idee.utils.SimpleTextWatcher
+import kotlinx.android.synthetic.main.fragment_edit_idea.*
 
 /**
  * Created by kmisztal on 29/06/2018.
