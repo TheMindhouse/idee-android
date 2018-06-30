@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:fitsSystemWindows="true"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_main"
+    android:background="@drawable/gradient_diagonal"
     tools:context="io.mindhouse.idee.ui.auth.AuthActivity">
 
     <com.facebook.login.widget.LoginButton
