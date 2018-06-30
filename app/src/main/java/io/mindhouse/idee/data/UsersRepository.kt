@@ -24,9 +24,23 @@ class UsersRepository @Inject constructor() {
         return RxFirestore.setDocument(doc, me, SetOptions.merge())
     }
 
-    fun findUser(id: String): Maybe<User> {
+    fun findUserById(id: String): Maybe<User> {
         val doc = db.collection("users").document(id)
-        return RxFirestore.getDocument(doc, User::class.java)
+        return RxFirestore.getDocument(doc)
+                .map { it.toObject(User::class.java)?.copy(id = it.id) }
+    }
+
+    fun findUserByEmail(email: String): Maybe<User> {
+        val doc = db.collection("users").whereEqualTo("email", email)
+        return RxFirestore.getCollection(doc)
+                .flatMap {
+                    if (!it.isEmpty) {
+                        Maybe.just(it.documents[0])
+                    } else {
+                        Maybe.empty()
+                    }
+                }
+                .map { it.toObject(User::class.java)?.copy(id = it.id) }
     }
 
 }

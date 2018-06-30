@@ -18,7 +18,7 @@ import javax.inject.Inject
  *
  * @author Krzysztof Misztal
  */
-abstract class BaseActivity<S : ViewState, out VM : BaseViewModel<S>> : AppCompatActivity(), HasSupportFragmentInjector {
+abstract class MvvmActivity<S : ViewState, out VM : BaseViewModel<S>> : AppCompatActivity(), HasSupportFragmentInjector {
 
     @Inject
     lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>

@@ -4,8 +4,8 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.widget.Toast
-import io.mindhouse.idee.di.utils.ViewModelFactory
 import dagger.android.support.AndroidSupportInjection
+import io.mindhouse.idee.di.utils.ViewModelFactory
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -14,7 +14,7 @@ import javax.inject.Inject
  *
  * @author Krzysztof Misztal
  */
-abstract class BaseFragment<S : ViewState, out VM : BaseViewModel<S>> : Fragment() {
+abstract class MvvmFragment<S : ViewState, out VM : BaseViewModel<S>> : Fragment() {
 
     @Inject
     protected lateinit var viewModelFactory: ViewModelFactory

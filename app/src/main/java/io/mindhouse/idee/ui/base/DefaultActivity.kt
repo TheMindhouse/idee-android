@@ -7,7 +7,7 @@ import android.arch.lifecycle.ViewModelProviders
  *
  * @author Krzysztof Misztal
  */
-abstract class DefaultActivity : BaseActivity<ViewState, DefaultViewModel>() {
+abstract class DefaultActivity : MvvmActivity<ViewState, DefaultViewModel>() {
 
     override fun render(state: ViewState) {
         // do nothing

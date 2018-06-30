@@ -64,6 +64,11 @@ android {
             }
         }
     }
+
+    //We use Parcelable from Kotlin extensions
+    androidExtensions {
+        experimental = true
+    }
 }
 
 dependencies {
@@ -94,6 +99,8 @@ dependencies {
     implementation 'com.jakewharton.rxrelay2:rxrelay:2.0.0'
 
     implementation 'com.jakewharton.timber:timber:4.5.1'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"

@@ -15,15 +15,12 @@ abstract class BaseViewModel<T : ViewState> : ViewModel() {
     protected abstract val initialState: T
 
     val stateData: NonNullableMutableLiveData<T> by lazy { NonNullableMutableLiveData(initialState) }
+    val state: T get() = stateData.value
 
     private val disposables = CompositeDisposable()
 
     protected fun postState(state: T) {
         stateData.postValue(state)
-    }
-
-    protected fun getState(): T {
-        return stateData.value
     }
 
     protected fun addDisposable(disposable: Disposable) {
