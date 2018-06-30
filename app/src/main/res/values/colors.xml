@@ -6,6 +6,7 @@
 
     <color name="transparent">#00FFFFFF</color>
     <color name="white">#FFFFFF</color>
+    <color name="gray_dark">#222</color>
 
     <color name="turquoise">#00e7e4</color>
     <color name="turquoise_transparent">#5500e7e4</color>
