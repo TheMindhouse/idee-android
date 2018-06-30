@@ -7,6 +7,22 @@
 
     <style name="TextDefault" parent="@android:style/TextAppearance.Small">
         <item name="android:fontFamily">@font/catamaran</item>
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="TextDefault.Small">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+    
+    <style name="TextDefault.Big">
+        <item name="android:textSize">17sp</item>
+    </style>
+
+    <style name="TextDefault.Header">
+        <item name="android:textSize">19sp</item>
     </style>
 
 </resources>
