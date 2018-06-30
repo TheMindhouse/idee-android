@@ -100,9 +100,24 @@ class BoardsRepository @Inject constructor(
         return RxFirestore.observeQueryRef(docRef)
                 .map {
                     it.documents.mapNotNull {
-                        it.toObject(Idea::class.java)?.copy(id = it.id)
+                        it.toObject(Idea::class.java)?.copy(id = it.id, boardId = boardId)
                     }
                 }
+    }
+
+    fun createIdea(idea: Idea): Single<Idea> {
+        val ref = db.collection("boards").document(idea.boardId)
+                .collection("ideas")
+
+        return RxFirestore.addDocument(ref, idea)
+                .map { idea.copy(id = it.id) }
+    }
+
+    fun updateIdea(idea: Idea): Completable {
+        val ref = db.collection("boards").document(idea.boardId)
+                .collection("ideas").document(idea.id)
+
+        return RxFirestore.setDocument(ref, idea, SetOptions.merge())
     }
 
     //==========================================================================

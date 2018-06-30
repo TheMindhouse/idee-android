@@ -16,6 +16,9 @@ data class Idea(
         @get:Exclude
         val id: String = "",
 
+        @get:Exclude
+        val boardId: String = "",
+
         val name: String = "",
         val description: String? = null,
         val ease: Int = 10,

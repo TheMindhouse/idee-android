@@ -3,14 +3,13 @@ package io.mindhouse.idee.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import io.mindhouse.idee.R
 import io.mindhouse.idee.data.model.Board
 import io.mindhouse.idee.data.model.Idea
 import io.mindhouse.idee.ui.account.MyAccountFragment
 import io.mindhouse.idee.ui.base.DefaultActivity
+import io.mindhouse.idee.ui.idea.IdeaActivity
 import io.mindhouse.idee.ui.idea.list.IdeaListFragment
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : DefaultActivity(), IdeaListFragment.FragmentCallbacks {
 
@@ -35,7 +34,8 @@ class MainActivity : DefaultActivity(), IdeaListFragment.FragmentCallbacks {
     }
 
     override fun onIdeaSelected(idea: Idea) {
-        Toast.makeText(this, "Idea clicked: $idea", Toast.LENGTH_SHORT).show()
+        val intent = IdeaActivity.newIntent(this, idea.boardId, idea)
+        startActivity(intent)
     }
 
     //==========================================================================

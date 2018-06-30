@@ -14,6 +14,12 @@
 
     <!--Ideas-->
     <string name="select_board">Select a board to see ideas</string>
+    <string name="hint_idea_name">Idea name</string>
+    <string name="hint_idea_description">Description</string>
+    <string name="ease">Ease</string>
+    <string name="impact">Impact</string>
+    <string name="confidence">Confidence</string>
+    <string name="create_idea">Create idea</string>
 
     <!--Generic-->
     <string name="save">Save</string>

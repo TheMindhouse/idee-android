@@ -8,6 +8,8 @@ import io.mindhouse.idee.ui.account.MyAccountFragment
 import io.mindhouse.idee.ui.auth.AuthActivity
 import io.mindhouse.idee.ui.board.BoardActivity
 import io.mindhouse.idee.ui.board.EditBoardFragment
+import io.mindhouse.idee.ui.idea.EditIdeaFragment
+import io.mindhouse.idee.ui.idea.IdeaActivity
 import io.mindhouse.idee.ui.idea.list.IdeaListFragment
 
 /**
@@ -31,10 +33,16 @@ abstract class BuildersModule {
     abstract fun bindBoardActivity(): BoardActivity
 
     @ContributesAndroidInjector
+    abstract fun bindIdeaActivity(): IdeaActivity
+
+    @ContributesAndroidInjector
     abstract fun bindMyAccountFragment(): MyAccountFragment
 
     @ContributesAndroidInjector
     abstract fun bindEditBoardFragment(): EditBoardFragment
+
+    @ContributesAndroidInjector
+    abstract fun bindEditIdeaFragment(): EditIdeaFragment
 
     @ContributesAndroidInjector
     abstract fun bindIdeaListFragment(): IdeaListFragment

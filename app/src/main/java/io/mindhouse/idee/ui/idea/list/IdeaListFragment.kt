@@ -11,7 +11,7 @@ import io.mindhouse.idee.R
 import io.mindhouse.idee.data.model.Board
 import io.mindhouse.idee.data.model.Idea
 import io.mindhouse.idee.ui.base.MvvmFragment
-import kotlinx.android.synthetic.main.fragment_idea_list.*
+import io.mindhouse.idee.ui.idea.IdeaActivity
 
 /**
  * Created by kmisztal on 29/06/2018.
@@ -62,6 +62,14 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
         adapter.onItemClickedListener = { idea, _ ->
             fragmentCallbacks?.onIdeaSelected(idea)
         }
+
+        addIdeaButton.setOnClickListener {
+            val boardId = board?.id
+            if (boardId != null) {
+                val intent = IdeaActivity.newIntent(it.context, boardId)
+                startActivity(intent)
+            }
+        }
     }
 
     override fun render(state: IdeaListViewState) {
@@ -73,6 +81,12 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
             progressBar.visibility = View.VISIBLE
         } else {
             progressBar.visibility = View.GONE
+        }
+
+        if (state.board == null) {
+            addIdeaButton.hide()
+        } else {
+            addIdeaButton.show()
         }
     }
 

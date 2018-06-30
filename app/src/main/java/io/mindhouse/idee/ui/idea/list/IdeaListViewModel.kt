@@ -66,7 +66,7 @@ class IdeaListViewModel @Inject constructor(
     }
 
     private fun onError(throwable: Throwable) {
-        Timber.e("Error observing ideas for board: $board")
+        Timber.e(throwable, "Error observing ideas for board: $board")
         val msg = exceptionHandler.getErrorMessage(throwable)
         postState(state.copy(isLoading = false, errorMessage = msg))
         observeIdeas()
