@@ -16,7 +16,11 @@ class ExceptionHandler @Inject constructor(
      * @return string res of error message
      */
     fun getErrorMessage(throwable: Throwable): String {
-        return getString(R.string.error_unknown)
+        return when (throwable) {
+        //todo firestore permission denied!
+            else -> getString(R.string.error_unknown)
+
+        }
     }
 
 
