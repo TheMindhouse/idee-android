@@ -24,6 +24,7 @@ class EditIdeaViewModel @Inject constructor(
     override val initialState = EditIdeaViewState(false, false)
 
     fun createIdea(idea: Idea) {
+        //todo result takes long when slow internet. figure it out
         postState(state.copy(isLoading = true))
         val disposable = boardsRepository.createIdea(idea)
                 .subscribeOn(ioScheduler)
