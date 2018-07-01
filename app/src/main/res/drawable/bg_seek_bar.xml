@@ -24,15 +24,15 @@
 
                 <item
                     android:drawable="@drawable/gradient_horizontal"
-                    android:state_pressed="true"></item>
+                    android:state_pressed="true" />
 
                 <item
                     android:drawable="@drawable/gradient_horizontal"
-                    android:state_activated="true"></item>
+                    android:state_activated="true" />
 
                 <item
                     android:drawable="@color/transparent"
-                    android:state_enabled="false"></item>
+                    android:state_enabled="false" />
 
                 <item android:drawable="@color/blue" />
 

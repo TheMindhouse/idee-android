@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
 
     <color name="transparent">#00FFFFFF</color>
     <color name="white">#FFFFFF</color>
@@ -15,8 +12,8 @@
     <color name="lime">#bfef00</color>
     <color name="lime_transparent">#55bfef00</color>
 
-    <color name="blue">#27127c</color>
-    <color name="blue_transparent">#4c27127c</color>
-    <color name="blue_super_transparent">#1227127c</color>
+    <color name="blue">#27087c</color>
+    <color name="blue_transparent">#4d27087c</color>
+    <color name="blue_super_transparent">#1227087c</color>
 
 </resources>
