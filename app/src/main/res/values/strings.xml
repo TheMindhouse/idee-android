@@ -21,6 +21,48 @@
     <string name="confidence">Confidence</string>
     <string name="create_idea">Create idea</string>
 
+    <string-array name="ease_description">
+        <item>you lazy bastard</item>
+        <item>your grandma could do it</item>
+        <item>easy-peasy</item>
+        <item>piece of cake</item>
+        <item>it ain\'t hard</item>
+        <item>don\'t sweat too much</item>
+        <item>it ain\'t easy</item>
+        <item>no honey, no money</item>
+        <item>no paint, no gain</item>
+        <item>nobel prize level</item>
+        <item>rocket science, bro</item>
+    </string-array>
+
+    <string-array name="confidence_description">
+        <item>grow some balls</item>
+        <item>seriously?</item>
+        <item>don\'t quit your job yet</item>
+        <item>we believe in you</item>
+        <item>you can do better</item>
+        <item>it will work (or not)</item>
+        <item>you got it!</item>
+        <item>that\'s a spirit</item>
+        <item>that\'s what I\'m talking about</item>
+        <item>like a boss</item>
+        <item>fuck yeah!</item>
+    </string-array>
+
+    <string-array name="impact_description">
+        <item>nobody cares</item>
+        <item>not really a game-changer</item>
+        <item>your mum will be proud</item>
+        <item>useless but cool</item>
+        <item>almost like this app</item>
+        <item>so, so</item>
+        <item>makes life easier</item>
+        <item>that\'s an idea</item>
+        <item>Steve would be impressed</item>
+        <item>once in a lifetime</item>
+        <item>Elon has a competition</item>
+    </string-array>
+
     <!--Generic-->
     <string name="save">Save</string>
     <string name="ok">OK</string>

@@ -8,14 +8,14 @@
     <style name="TextDefault" parent="@android:style/TextAppearance.Small">
         <item name="android:fontFamily">@font/catamaran_bold</item>
         <item name="android:textColor">@color/blue</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:lineSpacingExtra">0dp</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
     <style name="TextDefault.Small">
         <item name="android:fontFamily">@font/catamaran</item>
-        <item name="android:textSize">13sp</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="TextDefault.Big">

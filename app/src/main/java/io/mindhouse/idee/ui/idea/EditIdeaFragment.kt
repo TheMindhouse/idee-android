@@ -46,13 +46,18 @@ class EditIdeaFragment : MvvmFragment<EditIdeaViewState, EditIdeaViewModel>() {
                 ?: throw IllegalStateException("Fragment was not initialized with boardId!")
     }
 
+    private val seekBarListener = SnappingSeekBarListener()
+    private val easeArray by lazy { resources.getStringArray(R.array.ease_description) }
+    private val confidenceArray by lazy { resources.getStringArray(R.array.confidence_description) }
+    private val impactArray by lazy { resources.getStringArray(R.array.impact_description) }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_edit_idea, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
-        validateInput()
+        updateUI()
     }
 
     override fun render(state: EditIdeaViewState) {
@@ -86,8 +91,16 @@ class EditIdeaFragment : MvvmFragment<EditIdeaViewState, EditIdeaViewModel>() {
         }
     }
 
-    private fun validateInput() {
+    private fun updateUI() {
         saveButton.isEnabled = !ideaName.text.isNullOrBlank()
+
+        easeValue.text = ease.adjustedProgress().toString()
+        impactValue.text = impact.adjustedProgress().toString()
+        confidenceValue.text = confidence.adjustedProgress().toString()
+
+        easeDesc.text = easeArray[ease.adjustedProgress()]
+        confidenceDesc.text = confidenceArray[confidence.adjustedProgress()]
+        impactDesc.text = impactArray[impact.adjustedProgress()]
     }
 
     private fun initViews() {
@@ -101,29 +114,13 @@ class EditIdeaFragment : MvvmFragment<EditIdeaViewState, EditIdeaViewModel>() {
             confidence.progress = idea.confidence * SEEK_BAR_FACTOR
         }
 
-        ease.setOnSeekBarChangeListener(object : SnappingSeekBarListener() {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                easeValue.text = seekBar.adjustedProgress().toString()
-            }
-        })
-        impact.setOnSeekBarChangeListener(object : SnappingSeekBarListener() {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                impactValue.text = seekBar.adjustedProgress().toString()
-            }
-        })
-        confidence.setOnSeekBarChangeListener(object : SnappingSeekBarListener() {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                confidenceValue.text = seekBar.adjustedProgress().toString()
-            }
-        })
-
-        easeValue.text = ease.adjustedProgress().toString()
-        impactValue.text = impact.adjustedProgress().toString()
-        confidenceValue.text = confidence.adjustedProgress().toString()
+        ease.setOnSeekBarChangeListener(seekBarListener)
+        impact.setOnSeekBarChangeListener(seekBarListener)
+        confidence.setOnSeekBarChangeListener(seekBarListener)
 
         ideaName.addTextChangedListener(object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable) {
-                validateInput()
+                updateUI()
             }
         })
 
@@ -145,7 +142,11 @@ class EditIdeaFragment : MvvmFragment<EditIdeaViewState, EditIdeaViewModel>() {
         fun onIdeaSaved()
     }
 
-    private open class SnappingSeekBarListener : SimpleOnSeekBarChangeListener() {
+    private inner class SnappingSeekBarListener : SimpleOnSeekBarChangeListener() {
+
+        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+            updateUI()
+        }
 
         override fun onStopTrackingTouch(seekBar: SeekBar) {
             //round down, for example: 94 -> 90

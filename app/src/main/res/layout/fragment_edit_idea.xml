@@ -47,10 +47,9 @@
             android:layout_height="@dimen/seek_bar_height_big"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:max="100"
             android:progress="50"
-            app:layout_constraintEnd_toStartOf="@+id/easeValue"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -66,11 +65,13 @@
 
         <TextView
             android:id="@+id/easeValue"
-            android:layout_width="wrap_content"
+            android:layout_width="23dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:includeFontPadding="false"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/ease"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/ease"
             app:layout_constraintTop_toTopOf="@+id/ease"
             tools:text="8" />
 
@@ -90,10 +91,9 @@
             android:layout_height="@dimen/seek_bar_height_big"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:max="100"
             android:progress="50"
-            app:layout_constraintEnd_toStartOf="@+id/confidenceValue"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
@@ -101,9 +101,11 @@
             android:id="@+id/confidenceValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:includeFontPadding="false"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/confidence"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/confidence"
             app:layout_constraintTop_toTopOf="@+id/confidence"
             tools:text="10" />
 
@@ -117,28 +119,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/confidence" />
 
-        <TextView
-            android:id="@+id/impactValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/impact"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/impact"
-            tools:text="7" />
-
         <SeekBar
             android:id="@+id/impact"
             android:layout_width="0dp"
             android:layout_height="@dimen/seek_bar_height_big"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:max="100"
             android:progress="50"
-            app:layout_constraintEnd_toStartOf="@+id/impactValue"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+        <TextView
+            android:id="@+id/impactValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:includeFontPadding="false"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/impact"
+            app:layout_constraintStart_toStartOf="@+id/impact"
+            app:layout_constraintTop_toTopOf="@+id/impact"
+            tools:text="7" />
 
         <Button
             android:id="@+id/saveButton"
@@ -164,6 +167,36 @@
             app:layout_constraintEnd_toEndOf="@+id/saveButton"
             app:layout_constraintStart_toStartOf="@+id/saveButton"
             app:layout_constraintTop_toTopOf="@+id/saveButton" />
+
+        <TextView
+            android:id="@+id/easeDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:textAppearance="@style/TextDefault.Small"
+            app:layout_constraintBottom_toTopOf="@+id/ease"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="easy-peasy" />
+
+        <TextView
+            android:id="@+id/confidenceDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:textAppearance="@style/TextDefault.Small"
+            app:layout_constraintBottom_toTopOf="@+id/confidence"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="seriously?" />
+
+        <TextView
+            android:id="@+id/impactDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:textAppearance="@style/TextDefault.Small"
+            app:layout_constraintBottom_toTopOf="@+id/impact"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="nobody cares" />
 
     </android.support.constraint.ConstraintLayout>
 
