@@ -142,7 +142,7 @@ class EditIdeaFragment : MvvmFragment<EditIdeaViewState, EditIdeaViewModel>() {
     override fun createViewModel() =
             ViewModelProviders.of(this, viewModelFactory)[EditIdeaViewModel::class.java]
 
-    private fun SeekBar.adjustedProgress() = this.progress / SEEK_BAR_FACTOR
+    private fun SeekBar.adjustedProgress() = (this.progress + 5) / SEEK_BAR_FACTOR
 
     interface FragmentCallbacks {
         fun onIdeaSaved()
@@ -156,7 +156,7 @@ class EditIdeaFragment : MvvmFragment<EditIdeaViewState, EditIdeaViewModel>() {
 
         override fun onStopTrackingTouch(seekBar: SeekBar) {
             //round down, for example: 94 -> 90
-            seekBar.progress = seekBar.progress / SEEK_BAR_FACTOR * SEEK_BAR_FACTOR
+            seekBar.progress = seekBar.adjustedProgress() * SEEK_BAR_FACTOR
         }
     }
 }
