@@ -3,6 +3,8 @@ package io.mindhouse.idee.ui.idea.list
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -59,6 +61,13 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
         super.onViewCreated(view, savedInstanceState)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(view.context)
+
+        val decoratorDrawable = ContextCompat.getDrawable(view.context, R.drawable.separator_idea_list)
+        if (decoratorDrawable != null) {
+            val decorator = DividerItemDecoration(view.context, LinearLayoutManager.VERTICAL)
+            decorator.setDrawable(decoratorDrawable)
+            recyclerView.addItemDecoration(decorator)
+        }
 
         adapter.onItemClickedListener = { idea, _ ->
             fragmentCallbacks?.onIdeaSelected(idea)

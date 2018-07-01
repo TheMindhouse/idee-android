@@ -5,5 +5,12 @@
     <dimen name="nav_drawer_width">280dp</dimen>
 
     <dimen name="seek_bar_height_big">25dp</dimen>
+    <dimen name="seek_bar_height_small">6dp</dimen>
+
+    <dimen name="idea_list_horizontal_padding">16dp</dimen>
+    <dimen name="separator_height">2dp</dimen>
+
+    <item name="idea_list_seek_bars_start" type="dimen">0.4</item>
+    <item name="idea_list_seek_bars_end" type="dimen">0.85</item>
 
 </resources>

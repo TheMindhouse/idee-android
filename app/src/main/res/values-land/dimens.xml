@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="idea_list_seek_bars_start" type="dimen">0.6</item>
+    <item name="idea_list_seek_bars_end" type="dimen">0.9</item>
+
+</resources>
