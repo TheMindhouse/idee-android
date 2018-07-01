@@ -13,6 +13,7 @@
         <item name="android:textViewStyle">@style/TextViewStyle</item>
         <item name="buttonStyle">@style/Button</item>
         <item name="actionBarStyle">@style/ActionBar</item>
+        <item name="seekBarStyle">@style/SeekBar</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

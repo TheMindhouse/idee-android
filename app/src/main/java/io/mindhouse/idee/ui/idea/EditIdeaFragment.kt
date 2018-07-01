@@ -11,7 +11,7 @@ import android.widget.SeekBar
 import io.mindhouse.idee.R
 import io.mindhouse.idee.data.model.Idea
 import io.mindhouse.idee.ui.base.MvvmFragment
-import io.mindhouse.idee.utils.SimpleOnSeekbarChangeListner
+import io.mindhouse.idee.utils.SimpleOnSeekBarChangeListener
 import io.mindhouse.idee.utils.SimpleTextWatcher
 import kotlinx.android.synthetic.main.fragment_edit_idea.*
 
@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.fragment_edit_idea.*
 class EditIdeaFragment : MvvmFragment<EditIdeaViewState, EditIdeaViewModel>() {
 
     companion object {
+        private const val SEEK_BAR_FACTOR = 10
         private const val KEY_IDEA = "idea"
         private const val KEY_BOARD_ID = "board_id"
 
@@ -75,7 +76,8 @@ class EditIdeaFragment : MvvmFragment<EditIdeaViewState, EditIdeaViewModel>() {
 
     private fun saveChanges(idea: Idea?) {
         val newIdea = Idea(idea?.id ?: "", boardId, ideaName.text.toString(),
-                ideaDescription.text.toString(), ease.progress, confidence.progress, impact.progress)
+                ideaDescription.text.toString(), ease.progress / 10,
+                confidence.progress / 10, impact.progress / 10)
 
         if (idea == null) {
             viewModel.createIdea(newIdea)
@@ -94,30 +96,30 @@ class EditIdeaFragment : MvvmFragment<EditIdeaViewState, EditIdeaViewModel>() {
             ideaName.setText(idea.name)
             ideaDescription.setText(idea.description)
 
-            ease.progress = idea.ease
-            impact.progress = idea.impact
-            confidence.progress = idea.confidence
+            ease.progress = idea.ease * SEEK_BAR_FACTOR
+            impact.progress = idea.impact * SEEK_BAR_FACTOR
+            confidence.progress = idea.confidence * SEEK_BAR_FACTOR
         }
 
-        ease.setOnSeekBarChangeListener(object : SimpleOnSeekbarChangeListner() {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                easeValue.text = progress.toString()
+        ease.setOnSeekBarChangeListener(object : SnappingSeekBarListener() {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                easeValue.text = seekBar.adjustedProgress().toString()
             }
         })
-        impact.setOnSeekBarChangeListener(object : SimpleOnSeekbarChangeListner() {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                impactValue.text = progress.toString()
+        impact.setOnSeekBarChangeListener(object : SnappingSeekBarListener() {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                impactValue.text = seekBar.adjustedProgress().toString()
             }
         })
-        confidence.setOnSeekBarChangeListener(object : SimpleOnSeekbarChangeListner() {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                confidenceValue.text = progress.toString()
+        confidence.setOnSeekBarChangeListener(object : SnappingSeekBarListener() {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                confidenceValue.text = seekBar.adjustedProgress().toString()
             }
         })
 
-        easeValue.text = ease.progress.toString()
-        impactValue.text = impact.progress.toString()
-        confidenceValue.text = confidence.progress.toString()
+        easeValue.text = ease.adjustedProgress().toString()
+        impactValue.text = impact.adjustedProgress().toString()
+        confidenceValue.text = confidence.adjustedProgress().toString()
 
         ideaName.addTextChangedListener(object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable) {
@@ -130,10 +132,24 @@ class EditIdeaFragment : MvvmFragment<EditIdeaViewState, EditIdeaViewModel>() {
         }
     }
 
+    //==========================================================================
+    // private
+    //==========================================================================
+
     override fun createViewModel() =
             ViewModelProviders.of(this, viewModelFactory)[EditIdeaViewModel::class.java]
 
+    private fun SeekBar.adjustedProgress() = this.progress / SEEK_BAR_FACTOR
+
     interface FragmentCallbacks {
         fun onIdeaSaved()
+    }
+
+    private open class SnappingSeekBarListener : SimpleOnSeekBarChangeListener() {
+
+        override fun onStopTrackingTouch(seekBar: SeekBar) {
+            //round down, for example: 94 -> 90
+            seekBar.progress = seekBar.progress / SEEK_BAR_FACTOR * SEEK_BAR_FACTOR
+        }
     }
 }

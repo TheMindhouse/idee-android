@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@android:id/background"
+        android:gravity="center_vertical|fill_horizontal">
+        <shape
+            android:shape="rectangle"
+            android:tint="@color/blue_transparent">
+
+            <solid android:color="@color/blue_transparent" />
+
+        </shape>
+    </item>
+
+    <item
+        android:id="@android:id/progress"
+        android:gravity="center_vertical|fill_horizontal">
+
+        <scale android:scaleWidth="100%">
+            <selector
+                android:enterFadeDuration="@integer/anim_duration_short"
+                android:exitFadeDuration="@integer/anim_duration_short">
+
+                <item
+                    android:drawable="@drawable/gradient_horizontal"
+                    android:state_pressed="true"></item>
+
+                <item
+                    android:drawable="@drawable/gradient_horizontal"
+                    android:state_activated="true"></item>
+
+                <item
+                    android:drawable="@color/transparent"
+                    android:state_enabled="false"></item>
+
+                <item android:drawable="@color/blue" />
+
+            </selector>
+        </scale>
+
+    </item>
+
+</layer-list>
