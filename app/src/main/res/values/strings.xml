@@ -20,6 +20,7 @@
     <string name="impact">Impact</string>
     <string name="confidence">Confidence</string>
     <string name="create_idea">Create idea</string>
+    <string name="total_score">Total score</string>
 
     <string-array name="ease_description">
         <item>you lazy bastard</item>

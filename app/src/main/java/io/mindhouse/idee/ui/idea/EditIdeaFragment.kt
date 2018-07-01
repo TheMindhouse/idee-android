@@ -94,13 +94,19 @@ class EditIdeaFragment : MvvmFragment<EditIdeaViewState, EditIdeaViewModel>() {
     private fun updateUI() {
         saveButton.isEnabled = !ideaName.text.isNullOrBlank()
 
-        easeValue.text = ease.adjustedProgress().toString()
-        impactValue.text = impact.adjustedProgress().toString()
-        confidenceValue.text = confidence.adjustedProgress().toString()
+        val ease = ease.adjustedProgress()
+        val confidence = confidence.adjustedProgress()
+        val impact = impact.adjustedProgress()
 
-        easeDesc.text = easeArray[ease.adjustedProgress()]
-        confidenceDesc.text = confidenceArray[confidence.adjustedProgress()]
-        impactDesc.text = impactArray[impact.adjustedProgress()]
+        easeValue.text = ease.toString()
+        impactValue.text = impact.toString()
+        confidenceValue.text = confidence.toString()
+
+        easeDesc.text = easeArray[ease]
+        confidenceDesc.text = confidenceArray[confidence]
+        impactDesc.text = impactArray[impact]
+
+        totalScoreValue.text = Math.round((ease + confidence + impact).toFloat() / 3).toString()
     }
 
     private fun initViews() {
