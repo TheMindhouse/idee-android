@@ -1,11 +1,11 @@
 package io.mindhouse.idee.ui.widget
 
 import android.content.Context
+import android.support.design.widget.TextInputEditText
 import android.support.v4.content.res.ResourcesCompat
 import android.util.AttributeSet
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
-import android.widget.EditText
 import timber.log.Timber
 
 
@@ -15,14 +15,13 @@ import timber.log.Timber
 class ActionEditText @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0,
-        defStyleRes: Int = 0
-) : EditText(context, attrs, defStyleAttr, defStyleRes) {
+        defStyleAttr: Int = 0
+) : TextInputEditText(context, attrs, defStyleAttr) {
 
     init {
         //For some reason it does't read TextAppearance
         try {
-            val ta = context.obtainStyledAttributes(attrs, intArrayOf(android.R.attr.fontFamily), defStyleAttr, defStyleRes)
+            val ta = context.obtainStyledAttributes(attrs, intArrayOf(android.R.attr.fontFamily), defStyleAttr, 0)
             if (ta.hasValue(0)) {
                 val id = ta.getResourceId(0, 0)
                 val font = ResourcesCompat.getFont(context, id)

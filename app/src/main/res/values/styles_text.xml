@@ -30,4 +30,8 @@
 
     </style>
 
+    <style name="EditTextHintTextAppearance" parent="TextDefault.Small">
+        <item name="android:textColor">@color/color_edit_text_hint</item>
+    </style>
+
 </resources>
