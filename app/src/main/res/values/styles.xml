@@ -61,6 +61,7 @@
         <item name="android:background">@drawable/bg_edit_text</item>
         <item name="android:textColorHint">@color/color_edit_text_hint</item>
         <item name="hintTextAppearance">@style/EditTextHintTextAppearance</item>
+        <item name="android:paddingTop">4dp</item>
     </style>
 
 </resources>
