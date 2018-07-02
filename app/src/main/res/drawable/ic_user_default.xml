@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape android:shape="oval">
+
+            <size
+                android:width="@dimen/my_account_avatar_size"
+                android:height="@dimen/my_account_avatar_size" />
+
+            <solid android:color="@color/blue_transparent" />
+
+        </shape>
+    </item>
+
+    <item android:drawable="@drawable/ic_comma_white" />
+
+</layer-list>

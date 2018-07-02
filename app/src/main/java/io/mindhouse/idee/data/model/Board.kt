@@ -3,6 +3,7 @@ package io.mindhouse.idee.data.model
 import android.os.Parcelable
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.IgnoreExtraProperties
+import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -18,4 +19,10 @@ data class Board(
         val ownerId: String = "",
         val name: String = "",
         val roles: Map<String, String> = emptyMap()
-) : Parcelable
+) : Parcelable {
+
+    @IgnoredOnParcel
+    @get:Exclude
+    val isShared = !roles.isEmpty()
+
+}
