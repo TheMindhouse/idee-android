@@ -16,6 +16,7 @@ import android.view.WindowManager
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
+import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -105,8 +106,7 @@ class AuthActivity : MvvmActivity<AuthViewState, AuthViewModel>() {
     }
 
     private fun initFbLogin() {
-        facebookLoginButton.setReadPermissions(AuthorizeRepository.FACEBOOK_PERMISSIONS)
-        facebookLoginButton.registerCallback(fbCallbackManager, object : FacebookCallback<LoginResult> {
+        LoginManager.getInstance().registerCallback(fbCallbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(result: LoginResult) {
                 viewModel.onFacebookToken(result)
             }
@@ -120,6 +120,10 @@ class AuthActivity : MvvmActivity<AuthViewState, AuthViewModel>() {
                 renderError(message)
             }
         })
+
+        facebookLoginButton.setOnClickListener {
+            LoginManager.getInstance().logInWithReadPermissions(this, AuthorizeRepository.FACEBOOK_PERMISSIONS)
+        }
     }
 
     private fun animateGradient() {

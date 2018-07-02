@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Idée</string>
 
+    <!--Auth-->
+    <string name="login_facebook">login with Facebook</string>
+    <string name="login_google">login with Google</string>
+
     <!--My Account-->
     <string name="create_board">Create new board</string>
     <string name="user_no_name">Anonymous user</string>
@@ -54,7 +58,7 @@
     <string-array name="impact_description">
         <item>nobody cares</item>
         <item>not really a game-changer</item>
-        <item>your mum will be proud</item>
+        <item>your mom will be proud</item>
         <item>useless but cool</item>
         <item>almost like this app</item>
         <item>so, so</item>
