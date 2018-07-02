@@ -150,6 +150,11 @@ class EditIdeaFragment : MvvmFragment<EditIdeaViewState, EditIdeaViewModel>() {
 
     private inner class SnappingSeekBarListener : SimpleOnSeekBarChangeListener() {
 
+        override fun onStartTrackingTouch(seekBar: SeekBar) {
+            super.onStartTrackingTouch(seekBar)
+            ideaName.clearFocus()
+        }
+
         override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
             updateUI()
         }
