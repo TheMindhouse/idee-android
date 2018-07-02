@@ -27,7 +27,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:fontFamily="@font/catamaran_bold"
                 android:hint="@string/hint_idea_name"
                 android:imeOptions="actionNext"
                 android:inputType="textMultiLine|textNoSuggestions|textCapSentences"
