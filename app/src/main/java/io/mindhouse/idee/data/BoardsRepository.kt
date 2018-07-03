@@ -10,6 +10,7 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Single
+import io.reactivex.functions.Function4
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -40,19 +41,16 @@ class BoardsRepository @Inject constructor(
         val readerRef = db.collection("boards").whereEqualTo("roles.${me.email}", ROLE_READER)
         val editorRef = db.collection("boards").whereEqualTo("roles.${me.email}", ROLE_EDITOR)
 
-        //todo uncomment when firestore security rules get fixed
-//        return Flowable.combineLatest(
-//                observeBoardQuery(ownedRef),
-//                observeBoardQuery(adminRef),
-//                observeBoardQuery(readerRef),
-//                observeBoardQuery(editorRef),
-//
-//                Function4 { r1, r2, r3, r4 ->
-//                    r1 + r2 + r3 + r4
-//                }
-//        )
+        return Flowable.combineLatest(
+                observeBoardQuery(ownedRef),
+                observeBoardQuery(adminRef),
+                observeBoardQuery(readerRef),
+                observeBoardQuery(editorRef),
 
-        return observeBoardQuery(ownedRef)
+                Function4 { r1, r2, r3, r4 ->
+                    r1 + r2 + r3 + r4
+                }
+        )
     }
 
     fun getMyBoards(): Single<List<Board>> {
@@ -79,7 +77,7 @@ class BoardsRepository @Inject constructor(
                 ?: return Single.error(IllegalArgumentException("Not logged in!"))
 
         val docRef = db.collection("boards")
-        val toCreate = board.copy(id = me.id)
+        val toCreate = board.copy(ownerId = me.id)
 
         return RxFirestore.addDocument(docRef, toCreate)
                 .map { toCreate.copy(id = it.id) }
