@@ -50,7 +50,7 @@
         <activity
             android:name=".ui.board.BoardActivity"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="adjustNothing" />
 
         <activity
             android:name=".ui.idea.IdeaActivity"
