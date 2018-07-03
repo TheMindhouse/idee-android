@@ -31,7 +31,7 @@ class UsersRepository @Inject constructor() {
     }
 
     fun findUserByEmail(email: String): Maybe<User> {
-        val doc = db.collection("users").whereEqualTo("email", email)
+        val doc = db.collection("users").whereEqualTo("email", email).limit(1)
         return RxFirestore.getCollection(doc)
                 .flatMap {
                     if (!it.isEmpty) {

@@ -22,6 +22,10 @@
         <item name="android:background">@null</item>
     </style>
 
+    <style name="ImageButton" parent="Widget.AppCompat.ImageButton">
+        <item name="android:background">?selectableItemBackgroundBorderless</item>
+    </style>
+
     <style name="ActionBar" parent="Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="titleTextStyle">@style/ActionBarTextAppearance</item>
         <item name="elevation">0dp</item>

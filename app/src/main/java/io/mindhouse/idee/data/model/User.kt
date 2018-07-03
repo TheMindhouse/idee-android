@@ -11,10 +11,10 @@ import com.google.firebase.firestore.IgnoreExtraProperties
 @IgnoreExtraProperties
 data class User(
         @get:Exclude
-        val id: String,
-        val name: String?,
-        val email: String?,
-        val avatarUrl: String?,
+        val id: String = "",
+        val name: String? = null,
+        val email: String? = null,
+        val avatarUrl: String? = null,
 
         @get:Exclude
         val isAnonymous: Boolean = false

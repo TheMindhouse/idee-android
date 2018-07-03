@@ -27,6 +27,10 @@ abstract class BaseViewModel<T : ViewState> : ViewModel() {
         disposables.add(disposable)
     }
 
+    protected fun clearDisposables() {
+        disposables.clear()
+    }
+
     override fun onCleared() {
         super.onCleared()
         disposables.clear()

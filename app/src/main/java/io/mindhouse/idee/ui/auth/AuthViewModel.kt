@@ -9,6 +9,7 @@ import io.mindhouse.idee.ExceptionHandler
 import io.mindhouse.idee.R
 import io.mindhouse.idee.data.AuthorizeRepository
 import io.mindhouse.idee.data.BoardsRepository
+import io.mindhouse.idee.data.model.Board
 import io.mindhouse.idee.di.qualifier.IOScheduler
 import io.mindhouse.idee.ui.base.BaseViewModel
 import io.reactivex.Completable
@@ -73,7 +74,7 @@ class AuthViewModel @Inject constructor(
                     if (!it.isEmpty()) {
                         Completable.complete()
                     } else {
-                        boardsRepository.createBoard(defaultBoardName)
+                        boardsRepository.createBoard(Board(name = defaultBoardName))
                                 .toCompletable()
                     }
                 }

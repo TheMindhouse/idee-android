@@ -15,6 +15,10 @@
     <string name="share_options">Share options</string>
     <string name="add_email_to_share">Add e-mail to share</string>
     <string name="default_board_name">My ideas</string>
+    <string name="unknown_user">Unknown user</string>
+    <string name="email_address_to_share">e-mail address to share</string>
+    <string name="is_not_shared">This board is not shared.\nAdd email addresses that you want to share with.</string>
+    <string name="wrong_email">E-mail is not valid</string>
 
     <!--Ideas-->
     <string name="select_board">Select a board to see ideas</string>

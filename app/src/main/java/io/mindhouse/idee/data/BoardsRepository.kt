@@ -74,15 +74,15 @@ class BoardsRepository @Inject constructor(
         return RxFirestore.setDocument(docRef, board, SetOptions.merge())
     }
 
-    fun createBoard(name: String): Single<Board> {
+    fun createBoard(board: Board): Single<Board> {
         val me = authorizeRepository.currentUser
                 ?: return Single.error(IllegalArgumentException("Not logged in!"))
 
         val docRef = db.collection("boards")
-        val board = Board("", me.id, name, emptyMap())
+        val toCreate = board.copy(id = me.id)
 
-        return RxFirestore.addDocument(docRef, board)
-                .map { board.copy(id = it.id) }
+        return RxFirestore.addDocument(docRef, toCreate)
+                .map { toCreate.copy(id = it.id) }
     }
 
     fun findBoardById(boardId: String): Maybe<Board> {

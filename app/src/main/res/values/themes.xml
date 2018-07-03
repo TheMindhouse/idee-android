@@ -17,6 +17,7 @@
 
         <item name="android:textViewStyle">@style/TextViewStyle</item>
         <item name="buttonStyle">@style/Button</item>
+        <item name="imageButtonStyle">@style/ImageButton</item>
         <item name="actionBarStyle">@style/ActionBar</item>
         <item name="seekBarStyle">@style/SeekBar</item>
         <item name="editTextStyle">@style/EditText</item>
