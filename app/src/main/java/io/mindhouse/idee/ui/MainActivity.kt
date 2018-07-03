@@ -3,6 +3,7 @@ package io.mindhouse.idee.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import io.mindhouse.idee.R
 import io.mindhouse.idee.data.model.Board
 import io.mindhouse.idee.data.model.Idea
@@ -33,6 +34,11 @@ class MainActivity : DefaultActivity(), IdeaListFragment.FragmentCallbacks {
 
         initNavigation()
         initFragment()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_board, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onIdeaSelected(idea: Idea) {
