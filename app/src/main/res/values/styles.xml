@@ -34,6 +34,14 @@
     <style name="ToolbarTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:background">@color/white</item>
         <item name="android:textColorPrimary">@color/blue</item>
+
+        <item name="colorControlNormal">@color/blue</item>
+        <item name="android:textColorSecondary">@color/blue</item>
+        <item name="actionOverflowButtonStyle">@style/OverFlow</item>
+    </style>
+
+    <style name="OverFlow" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_menu_dots</item>
     </style>
 
     <style name="SeekBar" parent="Widget.AppCompat.SeekBar">
