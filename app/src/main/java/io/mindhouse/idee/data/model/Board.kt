@@ -35,7 +35,7 @@ data class Board(
     val isShared = !roles.isEmpty()
 
     fun roleOf(user: User): Role? {
-        if (user.id == id) return Role.ADMIN
+        if (user.id == ownerId) return Role.OWNER
         if (user.email == null) return null
 
         val role = roles[user.email] ?: return null

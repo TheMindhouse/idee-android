@@ -101,6 +101,7 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.5.1'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
 
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"

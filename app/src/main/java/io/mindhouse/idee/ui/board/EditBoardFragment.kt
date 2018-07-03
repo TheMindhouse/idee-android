@@ -14,6 +14,7 @@ import io.mindhouse.idee.data.model.Board
 import io.mindhouse.idee.ui.base.MvvmFragment
 import io.mindhouse.idee.utils.SimpleTextWatcher
 import io.mindhouse.idee.utils.isEmail
+import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.fragment_edit_board.*
 
 /**
@@ -24,7 +25,7 @@ import kotlinx.android.synthetic.main.fragment_edit_board.*
 class EditBoardFragment : MvvmFragment<EditBoardViewState, EditBoardViewModel>() {
 
     companion object {
-        private const val KEY_BOARD = "board_id"
+        private const val KEY_BOARD = "board"
 
         fun newInstance(board: Board? = null): EditBoardFragment {
             val fragment = EditBoardFragment()
@@ -43,8 +44,13 @@ class EditBoardFragment : MvvmFragment<EditBoardViewState, EditBoardViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val board = board
         val title = board?.name ?: getString(R.string.create_board)
         activity?.title = title
+
+        if (board != null) {
+            viewModel.board = board
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
@@ -56,6 +62,7 @@ class EditBoardFragment : MvvmFragment<EditBoardViewState, EditBoardViewModel>()
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(view.context)
+        recyclerView.itemAnimator = LandingAnimator()
         adapter.onItemClickedListener = { attendee, _ ->
             //attendee removed
             viewModel.removeEmail(attendee.email)
