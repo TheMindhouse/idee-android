@@ -117,9 +117,9 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
         }
 
         if (state.board == null) {
-            addIdeaButton.hide()
+            addIdeaButton.visibility = View.GONE
         } else {
-            addIdeaButton.show()
+            addIdeaButton.visibility = View.VISIBLE
         }
     }
 
