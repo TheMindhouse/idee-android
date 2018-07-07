@@ -1,6 +1,7 @@
 package io.mindhouse.idee.ui.board
 
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.os.Bundle
 import android.support.transition.TransitionManager
 import android.support.v7.widget.LinearLayoutManager
@@ -14,7 +15,6 @@ import io.mindhouse.idee.data.model.Board
 import io.mindhouse.idee.ui.base.MvvmFragment
 import io.mindhouse.idee.utils.SimpleTextWatcher
 import io.mindhouse.idee.utils.isEmail
-import jp.wasabeef.recyclerview.animators.LandingAnimator
 import kotlinx.android.synthetic.main.fragment_edit_board.*
 
 /**
@@ -43,12 +43,12 @@ class EditBoardFragment : MvvmFragment<EditBoardViewState, EditBoardViewModel>()
     private val board: Board? by lazy { arguments?.getParcelable(KEY_BOARD) as? Board }
     private val adapter = AttendeesRecyclerAdapter(true)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+
         val board = board
         val title = board?.name ?: getString(R.string.create_board)
         activity?.title = title
-
         if (board != null) {
             viewModel.board = board
         }
@@ -63,7 +63,7 @@ class EditBoardFragment : MvvmFragment<EditBoardViewState, EditBoardViewModel>()
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(view.context)
-        recyclerView.itemAnimator = LandingAnimator()
+//        recyclerView.itemAnimator = LandingAnimator()
         adapter.onItemClickedListener = { attendee, _ ->
             //attendee removed
             viewModel.removeEmail(attendee.email)

@@ -22,6 +22,16 @@
         <item name="android:background">@null</item>
     </style>
 
+    <style name="Button.Borderless.Small">
+        <item name="android:textAppearance">@style/TextDefault.Small</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+    </style>
+
     <style name="ImageButton" parent="Widget.AppCompat.ImageButton">
         <item name="android:background">?selectableItemBackgroundBorderless</item>
     </style>

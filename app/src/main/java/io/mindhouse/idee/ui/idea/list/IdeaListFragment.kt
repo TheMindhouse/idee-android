@@ -84,9 +84,21 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
     }
 
     override fun render(state: IdeaListViewState) {
+        val context = context ?: return
         val name = state.board?.name ?: getString(R.string.app_name)
         activity?.title = name
         adapter.setItems(state.ideas)
+
+        shareStatus.setText(state.shareStatus)
+        val color = if (state.shareStatus == R.string.not_shared) {
+            shareStatus.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_share_gray, 0)
+            ContextCompat.getColor(context, R.color.gray)
+        } else {
+            shareStatus.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_share, 0)
+            ContextCompat.getColor(context, R.color.blue)
+        }
+
+        shareStatus.setTextColor(color)
 
         if (state.isLoading) {
             progressBar.visibility = View.VISIBLE
