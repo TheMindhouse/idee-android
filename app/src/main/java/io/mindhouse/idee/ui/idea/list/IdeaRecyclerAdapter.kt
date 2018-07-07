@@ -19,6 +19,13 @@ import kotlinx.android.synthetic.main.item_idea.view.*
  */
 class IdeaRecyclerAdapter : ArrayRecyclerAdapter<Idea, IdeaRecyclerAdapter.ViewHolder>() {
 
+    var comparator = IdeaComparator()
+        set(value) {
+            if (field == value) return
+            field = value
+            setItems(data)
+        }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_idea, parent, false)
 
@@ -42,6 +49,13 @@ class IdeaRecyclerAdapter : ArrayRecyclerAdapter<Idea, IdeaRecyclerAdapter.ViewH
         holder.average.text = Math.round(idea.average).toString()
     }
 
+    override fun setItems(items: List<Idea>) {
+        val sorted = items.sortedWith(comparator)
+        super.setItems(sorted)
+    }
+
+    //==========================================================================
+
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val ideaName: TextView = view.ideaName
         val ease: SeekBar = view.ease
@@ -55,4 +69,5 @@ class IdeaRecyclerAdapter : ArrayRecyclerAdapter<Idea, IdeaRecyclerAdapter.ViewH
             }
         }
     }
+
 }

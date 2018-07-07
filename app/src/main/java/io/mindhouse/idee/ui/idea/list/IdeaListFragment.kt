@@ -81,6 +81,11 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
                 startActivity(intent)
             }
         }
+
+        sortOrderButton.setOnClickListener {
+            val ascending = !adapter.comparator.ascending
+            adapter.comparator = adapter.comparator.copy(ascending = ascending)
+        }
     }
 
     override fun render(state: IdeaListViewState) {

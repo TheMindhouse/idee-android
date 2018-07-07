@@ -10,7 +10,7 @@ import android.support.v7.widget.RecyclerView
  */
 abstract class ArrayRecyclerAdapter<T : Any, VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>() {
 
-    var data: MutableList<T> = ArrayList()
+    protected var data: MutableList<T> = ArrayList()
 
     var onItemClickedListener: ((T, Int) -> Unit)? = null
 
@@ -34,7 +34,7 @@ abstract class ArrayRecyclerAdapter<T : Any, VH : RecyclerView.ViewHolder> : Rec
         }
     }
 
-    fun setItems(items: List<T>) {
+    open fun setItems(items: List<T>) {
         val oldData = data
         this.data = ArrayList(items)
 
