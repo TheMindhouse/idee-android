@@ -1,5 +1,6 @@
 package io.mindhouse.idee.data
 
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
@@ -37,12 +38,16 @@ class BoardsRepository @Inject constructor(
         val me = authorizeRepository.currentUser
                 ?: return Flowable.error(IllegalArgumentException("Not logged in!"))
 
-        val ownedRef = db.collection("boards").whereEqualTo("ownerId", me.id)
-        val adminRef = db.collection("boards").whereEqualTo("roles.${me.email}", ROLE_ADMIN)
-        val readerRef = db.collection("boards").whereEqualTo("roles.${me.email}", ROLE_READER)
-        val editorRef = db.collection("boards").whereEqualTo("roles.${me.email}", ROLE_EDITOR)
+        val ownedRef = db.collection("boards")
+                .whereEqualTo("ownerId", me.id)
+        val adminRef = db.collection("boards")
+                .whereEqualTo(FieldPath.of("roles", me.email), ROLE_ADMIN)
+        val readerRef = db.collection("boards")
+                .whereEqualTo(FieldPath.of("roles", me.email), ROLE_READER)
+        val editorRef = db.collection("boards")
+                .whereEqualTo(FieldPath.of("roles", me.email), ROLE_EDITOR)
 
-        return Flowable.combineLatest(
+        val flowable: Flowable<List<Board>> =  Flowable.combineLatest(
                 observeBoardQuery(ownedRef),
                 observeBoardQuery(adminRef),
                 observeBoardQuery(readerRef),
@@ -52,6 +57,9 @@ class BoardsRepository @Inject constructor(
                     r1 + r2 + r3 + r4
                 }
         )
+
+        return flowable.map { it.distinct() }
+
     }
 
     fun getMyBoards(): Single<List<Board>> {
@@ -73,7 +81,8 @@ class BoardsRepository @Inject constructor(
 
         return Completable.create {
             //We override fields
-            emitter -> RxCompletableHandler.assignOnTask<Void>(emitter, docRef.set(board))
+            emitter ->
+            RxCompletableHandler.assignOnTask<Void>(emitter, docRef.set(board))
         }
     }
 
