@@ -28,8 +28,14 @@ class MyAccountFragment : MvvmFragment<MyAccountViewState, MyAccountViewModel>()
         fun newInstance(): MyAccountFragment = MyAccountFragment()
     }
 
-    private var initialSelected = false
-    var onBoardSelectedListener: ((Board) -> Unit)? = null
+    var selected: Board? = null
+        private set(value) {
+            if (value != field) {
+                field = value
+                onBoardSelectedListener?.invoke(field)
+            }
+        }
+    var onBoardSelectedListener: ((Board?) -> Unit)? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_my_account, container, false)
@@ -41,7 +47,7 @@ class MyAccountFragment : MvvmFragment<MyAccountViewState, MyAccountViewModel>()
         recyclerView.layoutManager = lm
 
         adapter.onItemClickedListener = { boardViewState, _ ->
-            onBoardSelectedListener?.invoke(boardViewState.board)
+            selected = boardViewState.board
         }
 
         addBoardButton.setOnClickListener {
@@ -61,9 +67,32 @@ class MyAccountFragment : MvvmFragment<MyAccountViewState, MyAccountViewModel>()
         }
 
         adapter.setItems(state.boards)
-        if (!initialSelected && state.boards.isNotEmpty()) {
-            initialSelected = true
-            onBoardSelectedListener?.invoke(state.boards[0].board)
+        reselectBoard(state)
+    }
+
+    private fun reselectBoard(state: MyAccountViewState) {
+        //We have 4 scenarios:
+        //nothing was selected and we select first board
+        //board was selected but got updated
+        //board was selected but got deleted
+        //board was selected and nothing changed
+
+        val selected = selected
+
+        if (selected == null) {
+            this.selected = state.boards.firstOrNull()?.board
+
+        } else {
+            val matching = state.boards.find { it.board.id == selected.id }
+            if (matching == null) {
+                //it means that for some reason user lost access to the selected board
+                this.selected = state.boards.firstOrNull()?.board
+
+            } else if (matching.board != selected) {
+                //it means selector board has been updated
+                this.selected = matching.board
+            }
+            //else -> something changed, but selection remains the same
         }
     }
 
@@ -79,7 +108,7 @@ class MyAccountFragment : MvvmFragment<MyAccountViewState, MyAccountViewModel>()
         menu.show()
 
         menu.setOnMenuItemClickListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.actionLogOut -> {
                     viewModel.logOut()
                     true
