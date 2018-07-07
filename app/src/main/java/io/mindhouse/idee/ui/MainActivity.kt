@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import io.mindhouse.idee.R
+import io.mindhouse.idee.data.BoardsRepository
 import io.mindhouse.idee.data.model.Board
 import io.mindhouse.idee.data.model.Idea
 import io.mindhouse.idee.ui.account.MyAccountFragment
@@ -15,14 +15,20 @@ import io.mindhouse.idee.ui.base.DefaultActivity
 import io.mindhouse.idee.ui.board.BoardActivity
 import io.mindhouse.idee.ui.idea.IdeaActivity
 import io.mindhouse.idee.ui.idea.list.IdeaListFragment
+import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
+import timber.log.Timber
+import javax.inject.Inject
 
 class MainActivity : DefaultActivity(), IdeaListFragment.FragmentCallbacks {
 
     companion object {
         fun newIntent(context: Context) = Intent(context, MainActivity::class.java)
     }
+
+    @Inject
+    lateinit var boardsRepository: BoardsRepository
 
     private lateinit var ideaListFragment: IdeaListFragment
     private var selectedBoard: Board? = null
@@ -64,7 +70,7 @@ class MainActivity : DefaultActivity(), IdeaListFragment.FragmentCallbacks {
                 true
             }
             R.id.actionBoardDelete -> {
-                Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show()
+                deleteSelectedBoard()
                 true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -75,6 +81,18 @@ class MainActivity : DefaultActivity(), IdeaListFragment.FragmentCallbacks {
     //==========================================================================
     // private
     //==========================================================================
+
+    private fun deleteSelectedBoard() {
+        //we don't save disposable -> Firestore doesn't inform about success if no internet
+        val board = selectedBoard
+        if (board != null) {
+            boardsRepository.delete(board)
+                    .subscribeBy(
+                            onComplete = { Timber.d("Deleted board: $board") },
+                            onError = { Timber.e(it, "Error deleting board!!") }
+                    )
+        }
+    }
 
     private fun adjustMenu() {
         val me = authorizeRepository.currentUser
