@@ -77,6 +77,16 @@ class MyAccountFragment : MvvmFragment<MyAccountViewState, MyAccountViewModel>()
         val menu = PopupMenu(context, moreButton, Gravity.LEFT)
         menu.inflate(R.menu.menu_my_account)
         menu.show()
+
+        menu.setOnMenuItemClickListener {
+            when(it.itemId) {
+                R.id.actionLogOut -> {
+                    viewModel.logOut()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     //==========================================================================

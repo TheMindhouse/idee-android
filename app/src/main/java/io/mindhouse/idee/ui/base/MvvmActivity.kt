@@ -1,5 +1,6 @@
 package io.mindhouse.idee.ui.base
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
@@ -8,8 +9,11 @@ import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
+import io.mindhouse.idee.data.AuthorizeRepository
 import io.mindhouse.idee.di.utils.ViewModelFactory
+import io.mindhouse.idee.ui.auth.AuthActivity
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.subscribeBy
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -26,6 +30,9 @@ abstract class MvvmActivity<S : ViewState, out VM : BaseViewModel<S>> : AppCompa
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    @Inject
+    lateinit var authorizeRepository: AuthorizeRepository
+
     val viewModel: VM by lazy { createViewModel() }
 
     private var disposable: Disposable? = null
@@ -37,9 +44,14 @@ abstract class MvvmActivity<S : ViewState, out VM : BaseViewModel<S>> : AppCompa
         viewModel.stateData.observeSafe(this) { renderInternal(it) }
     }
 
-    override fun onPause() {
+    override fun onStart() {
+        super.onStart()
+        observeAuthState()
+    }
+
+    override fun onStop() {
         disposable?.dispose()
-        super.onPause()
+        super.onStop()
     }
 
     open fun renderError(errorMessage: String) {
@@ -47,6 +59,17 @@ abstract class MvvmActivity<S : ViewState, out VM : BaseViewModel<S>> : AppCompa
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = supportFragmentInjector
+
+    //==========================================================================
+    // Protected
+    //==========================================================================
+
+    protected open fun onLoggedOut() {
+
+        val intent = AuthActivity.newIntent(this)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+    }
 
     //==========================================================================
     // Abstract
@@ -66,6 +89,14 @@ abstract class MvvmActivity<S : ViewState, out VM : BaseViewModel<S>> : AppCompa
     //==========================================================================
     // Private
     //==========================================================================
+
+    private fun observeAuthState() {
+        disposable = authorizeRepository.observeAuthState()
+                .filter { !it }
+                .subscribeBy(
+                        onNext = { onLoggedOut() }
+                )
+    }
 
     private fun renderInternal(state: S) {
         Timber.d("Rendering state: $state")

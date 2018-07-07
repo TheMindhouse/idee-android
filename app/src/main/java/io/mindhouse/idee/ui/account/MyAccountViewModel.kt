@@ -29,6 +29,10 @@ class MyAccountViewModel @Inject constructor(
         observeBoards()
     }
 
+    fun logOut() {
+        authorizeRepository.logout()
+    }
+
     //==========================================================================
     // private
     //==========================================================================

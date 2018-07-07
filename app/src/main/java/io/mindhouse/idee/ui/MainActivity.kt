@@ -8,7 +8,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import io.mindhouse.idee.R
-import io.mindhouse.idee.data.AuthorizeRepository
 import io.mindhouse.idee.data.model.Board
 import io.mindhouse.idee.data.model.Idea
 import io.mindhouse.idee.ui.account.MyAccountFragment
@@ -18,7 +17,6 @@ import io.mindhouse.idee.ui.idea.IdeaActivity
 import io.mindhouse.idee.ui.idea.list.IdeaListFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
-import javax.inject.Inject
 
 class MainActivity : DefaultActivity(), IdeaListFragment.FragmentCallbacks {
 
@@ -35,9 +33,6 @@ class MainActivity : DefaultActivity(), IdeaListFragment.FragmentCallbacks {
         }
 
     private var menu: Menu? = null
-
-    @Inject
-    lateinit var authorizeRepository: AuthorizeRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -54,6 +54,10 @@ class AuthActivity : MvvmActivity<AuthViewState, AuthViewModel>() {
         animateGradient()
     }
 
+    override fun onLoggedOut() {
+        //do nothing
+    }
+
     override fun onStop() {
         gradientAnimator?.end()
         super.onStop()
