@@ -88,6 +88,11 @@ class BoardsRepository @Inject constructor(
                 .map { toCreate.copy(id = it.id) }
     }
 
+    fun delete(board: Board): Completable {
+        val ref = db.collection("boards").document(board.id)
+        return RxFirestore.deleteDocument(ref)
+    }
+
     fun findBoardById(boardId: String): Maybe<Board> {
         val docRef = db.collection("boards").document(boardId)
         return RxFirestore.getDocument(docRef)

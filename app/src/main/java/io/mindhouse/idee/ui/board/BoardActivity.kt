@@ -29,6 +29,9 @@ class BoardActivity : DefaultActivity(), EditBoardFragment.FragmentCallbacks {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_board)
         initFragment()
+
+        val title = if (board == null) R.string.create_board_title else R.string.edit_board_title
+        setTitle(title)
     }
 
     override fun onBoardSaved() {

@@ -47,8 +47,6 @@ class EditBoardFragment : MvvmFragment<EditBoardViewState, EditBoardViewModel>()
         super.onAttach(context)
 
         val board = board
-        val title = board?.name ?: getString(R.string.create_board)
-        activity?.title = title
         if (board != null) {
             viewModel.board = board
         }
