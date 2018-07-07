@@ -2,11 +2,13 @@ package io.mindhouse.idee
 
 import android.app.Activity
 import android.app.Application
+import com.crashlytics.android.Crashlytics
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
+import io.fabric.sdk.android.Fabric
 import io.mindhouse.idee.di.component.DaggerAppComponent
 import timber.log.Timber
 import javax.inject.Inject
@@ -27,10 +29,16 @@ open class App : Application(), HasActivityInjector {
         initDI()
         initTimber()
         initFirebase()
-        // TODO: 23/06/2018 Crashlytics
+        initCrashlytics()
     }
 
     override fun activityInjector(): AndroidInjector<Activity> = dispatchingAndroidInjector
+
+    private fun initCrashlytics() {
+        if (!BuildConfig.DEBUG) {
+            Fabric.with(this, Crashlytics())
+        }
+    }
 
     private fun initDI() {
         val component = DaggerAppComponent.builder()
