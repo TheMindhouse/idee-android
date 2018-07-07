@@ -24,9 +24,7 @@ class EditIdeaViewModel @Inject constructor(
     override val initialState = EditIdeaViewState(false, false)
 
     fun createIdea(idea: Idea) {
-        //todo result takes long when slow internet. figure it out
-        postState(state.copy(isLoading = true))
-        val disposable = boardsRepository.createIdea(idea)
+        boardsRepository.createIdea(idea)
                 .subscribeOn(ioScheduler)
                 .subscribeBy(
                         onSuccess = {
@@ -35,21 +33,19 @@ class EditIdeaViewModel @Inject constructor(
                         },
                         onError = { onError(it, "creating idea") }
                 )
-        addDisposable(disposable)
+
+        postState(state.copy(isSaved = true))
     }
 
     fun updateIdea(idea: Idea) {
-        postState(state.copy(isLoading = true))
-        val disposable = boardsRepository.updateIdea(idea)
+        boardsRepository.updateIdea(idea)
                 .subscribeOn(ioScheduler)
                 .subscribeBy(
-                        onComplete = {
-                            Timber.d("Successfully updated idea: $idea")
-                            postState(state.copy(isLoading = false, isSaved = true))
-                        },
+                        onComplete = { Timber.d("Successfully updated idea: $idea") },
                         onError = { onError(it, "updating idea") }
                 )
-        addDisposable(disposable)
+
+        postState(state.copy(isSaved = true))
     }
 
     //==========================================================================

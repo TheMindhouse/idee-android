@@ -37,33 +37,27 @@ class EditBoardViewModel @Inject constructor(
     private val role = Board.EDITOR
 
     fun createNewBoard(name: String) {
-        val state = state.copy(isLoading = true)
-        postState(state)
-
         val board = board.copy(name = name)
         boardsRepository.createBoard(board)
                 .subscribeOn(ioScheduler)
                 .subscribeBy(
-                        onSuccess = {
-                            //Change should be observed, no need to do anything
-                            postState(state.copy(isLoading = false, isSaved = true))
-                            Timber.i("Successfully created board: $name")
-                        },
+                        onSuccess = { Timber.i("Successfully created board: $name") },
                         onError = { onError(it, "creating board") }
                 )
+
+        postState(state.copy(isSaved = true))
     }
 
     fun updateBoard(updatedName: String) {
-        val state = state.copy(isLoading = true)
-        postState(state)
         board = board.copy(name = updatedName)
-
         boardsRepository.updateBoard(board)
                 .subscribeOn(ioScheduler)
                 .subscribeBy(
-                        onComplete = { postState(state.copy(isLoading = false, isSaved = true)) },
+                        onComplete = { Timber.i("Successfully updated board: $board") },
                         onError = { onError(it, "updating board") }
                 )
+
+        postState(state.copy(isSaved = true))
     }
 
     fun addEmail(email: String) {
