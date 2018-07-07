@@ -3,6 +3,8 @@ package io.mindhouse.idee.ui.account
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.PopupMenu
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,6 +48,10 @@ class MyAccountFragment : MvvmFragment<MyAccountViewState, MyAccountViewModel>()
             val intent = BoardActivity.newIntent(view.context)
             startActivity(intent)
         }
+
+        moreButton.setOnClickListener {
+            showOverflowMenu(it)
+        }
     }
 
     override fun render(state: MyAccountViewState) {
@@ -60,6 +66,20 @@ class MyAccountFragment : MvvmFragment<MyAccountViewState, MyAccountViewModel>()
             onBoardSelectedListener?.invoke(state.boards[0].board)
         }
     }
+
+    //==========================================================================
+    // private
+    //==========================================================================
+
+    private fun showOverflowMenu(moreButton: View) {
+        val context = context ?: return
+
+        val menu = PopupMenu(context, moreButton, Gravity.LEFT)
+        menu.inflate(R.menu.menu_my_account)
+        menu.show()
+    }
+
+    //==========================================================================
 
     override fun createViewModel() =
             ViewModelProviders.of(this, viewModelFactory)[MyAccountViewModel::class.java]

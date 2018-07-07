@@ -8,6 +8,7 @@
     <!--My Account-->
     <string name="create_board">Create new board</string>
     <string name="user_no_name">Anonymous user</string>
+    <string name="log_out">Log out</string>
 
     <!--Board management-->
     <string name="create_board_title">Create board</string>
