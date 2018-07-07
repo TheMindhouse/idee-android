@@ -85,5 +85,5 @@
         <item name="hintTextAppearance">@style/EditTextHintTextAppearance</item>
         <item name="android:paddingTop">4dp</item>
     </style>
-
+    
 </resources>

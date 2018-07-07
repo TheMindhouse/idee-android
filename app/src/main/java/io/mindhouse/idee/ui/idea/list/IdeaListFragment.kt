@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -86,6 +87,10 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
             val ascending = !adapter.comparator.ascending
             adapter.comparator = adapter.comparator.copy(ascending = ascending)
         }
+
+        sortButton.setOnClickListener {
+            showSortDialog()
+        }
     }
 
     override fun render(state: IdeaListViewState) {
@@ -116,6 +121,33 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
         } else {
             addIdeaButton.show()
         }
+    }
+
+    //==========================================================================
+    // private
+    //==========================================================================
+
+    private fun showSortDialog() {
+        val context = context ?: return
+        AlertDialog.Builder(context)
+                .setTitle(R.string.sort_by)
+                .setItems(R.array.sorting_options) { _, which ->
+                    onSortingSelected(which)
+                }
+                .show()
+    }
+
+    private fun onSortingSelected(which: Int) {
+        val sorting = when (which) {
+            0 -> IdeaComparator.Mode.AVERAGE
+            1 -> IdeaComparator.Mode.EASE
+            2 -> IdeaComparator.Mode.CONFIDENCE
+            3 -> IdeaComparator.Mode.IMPACT
+            else -> throw IllegalArgumentException("Wrong sorting index: $which")
+        }
+
+        val comparator = adapter.comparator.copy(mode = sorting)
+        adapter.comparator = comparator
     }
 
     //==========================================================================

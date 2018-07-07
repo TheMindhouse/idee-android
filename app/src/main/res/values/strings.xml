@@ -36,6 +36,14 @@
     <string name="shared">Shared</string>
     <string name="shared_to_you">Shared to you</string>
     <string name="not_shared">Not shared</string>
+    <string name="sort_by">Sort ideas by:</string>
+
+    <string-array name="sorting_options">
+        <item>average note</item>
+        <item>ease</item>
+        <item>confidence</item>
+        <item>impact</item>
+    </string-array>
 
     <string-array name="ease_description">
         <item>you lazy bastard</item>
