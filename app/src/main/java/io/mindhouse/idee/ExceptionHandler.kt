@@ -1,6 +1,7 @@
 package io.mindhouse.idee
 
 import android.content.Context
+import com.google.firebase.firestore.FirebaseFirestoreException
 import javax.inject.Inject
 
 /**
@@ -17,7 +18,8 @@ class ExceptionHandler @Inject constructor(
      */
     fun getErrorMessage(throwable: Throwable): String {
         return when (throwable) {
-        //todo firestore permission denied!
+        // TODO: 07/07/2018 add more
+            is FirebaseFirestoreException -> getString(R.string.error_firestore)
             else -> getString(R.string.error_unknown)
 
         }

@@ -96,6 +96,7 @@
 
     <!--Errors-->
     <string name="error_unknown">Something went wrong :(</string>
+    <string name="error_firestore">Error accessing database</string>
 
     <!--Config-->
     <string name="facebook_app_id">2310649462278870</string>

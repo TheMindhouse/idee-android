@@ -27,8 +27,6 @@ class AuthorizeRepository @Inject constructor(
 
     private val auth by lazy { FirebaseAuth.getInstance() }
 
-    // TODO: 02/07/2018 Use case: token outdated
-
     companion object {
         val FACEBOOK_PERMISSIONS = listOf("email", "public_profile")
     }
