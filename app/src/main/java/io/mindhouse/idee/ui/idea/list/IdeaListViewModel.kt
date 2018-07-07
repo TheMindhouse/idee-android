@@ -1,6 +1,8 @@
 package io.mindhouse.idee.ui.idea.list
 
 import io.mindhouse.idee.ExceptionHandler
+import io.mindhouse.idee.R
+import io.mindhouse.idee.data.AuthorizeRepository
 import io.mindhouse.idee.data.BoardsRepository
 import io.mindhouse.idee.data.model.Board
 import io.mindhouse.idee.data.model.Idea
@@ -19,11 +21,12 @@ import javax.inject.Inject
  */
 class IdeaListViewModel @Inject constructor(
         private val boardsRepository: BoardsRepository,
+        private val authorizeRepository: AuthorizeRepository,
         @IOScheduler private val ioScheduler: Scheduler,
         private val exceptionHandler: ExceptionHandler
 ) : BaseViewModel<IdeaListViewState>() {
 
-    override val initialState = IdeaListViewState(null, emptyList(), false)
+    override val initialState = IdeaListViewState(null, R.string.not_shared, emptyList(), false)
 
     private var ideasDisposable: Disposable? = null
 
@@ -48,7 +51,14 @@ class IdeaListViewModel @Inject constructor(
             return
         }
 
-        postState(state.copy(board = board, isLoading = true))
+        var shareStatus = R.string.not_shared
+        if (board.isShared && board.ownerId == authorizeRepository.currentUser?.id) {
+            shareStatus = R.string.shared
+        } else if (board.isShared) {
+            shareStatus = R.string.shared_to_you
+        }
+
+        postState(state.copy(board = board, shareStatus = shareStatus, isLoading = true))
         //// TODO: 29/06/2018 retry after delay
         val disposable = boardsRepository.observeIdeas(board.id)
                 .subscribeOn(ioScheduler)

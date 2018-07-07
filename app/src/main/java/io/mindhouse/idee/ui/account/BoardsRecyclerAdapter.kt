@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import io.mindhouse.idee.R
 import io.mindhouse.idee.ui.base.recycler.ArrayRecyclerAdapter
@@ -24,10 +25,17 @@ class BoardsRecyclerAdapter : ArrayRecyclerAdapter<BoardViewState, BoardsRecycle
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val board = data[position].board
         holder.boardName.text = board.name
+
+        if (board.isShared) {
+            holder.shareIcon.visibility = View.VISIBLE
+        } else {
+            holder.shareIcon.visibility = View.INVISIBLE
+        }
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val boardName: TextView = view.boardName
+        val shareIcon: ImageView = view.shareIcon
 
         init {
             view.content.setOnClickListener {

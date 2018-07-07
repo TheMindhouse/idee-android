@@ -49,8 +49,12 @@
         </activity>
         <activity
             android:name=".ui.board.BoardActivity"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".ui.idea.IdeaActivity"></activity>
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name=".ui.idea.IdeaActivity"
+            android:windowSoftInputMode="stateHidden" />
     </application>
 
 </manifest>

@@ -11,7 +11,7 @@ import android.widget.SeekBar
 import io.mindhouse.idee.R
 import io.mindhouse.idee.data.model.Idea
 import io.mindhouse.idee.ui.base.MvvmFragment
-import io.mindhouse.idee.utils.SimpleOnSeekbarChangeListner
+import io.mindhouse.idee.utils.SimpleOnSeekBarChangeListener
 import io.mindhouse.idee.utils.SimpleTextWatcher
 import kotlinx.android.synthetic.main.fragment_edit_idea.*
 
@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.fragment_edit_idea.*
 class EditIdeaFragment : MvvmFragment<EditIdeaViewState, EditIdeaViewModel>() {
 
     companion object {
+        private const val SEEK_BAR_FACTOR = 10
         private const val KEY_IDEA = "idea"
         private const val KEY_BOARD_ID = "board_id"
 
@@ -45,13 +46,18 @@ class EditIdeaFragment : MvvmFragment<EditIdeaViewState, EditIdeaViewModel>() {
                 ?: throw IllegalStateException("Fragment was not initialized with boardId!")
     }
 
+    private val seekBarListener = SnappingSeekBarListener()
+    private val easeArray by lazy { resources.getStringArray(R.array.ease_description) }
+    private val confidenceArray by lazy { resources.getStringArray(R.array.confidence_description) }
+    private val impactArray by lazy { resources.getStringArray(R.array.impact_description) }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_edit_idea, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
-        validateInput()
+        updateUI()
     }
 
     override fun render(state: EditIdeaViewState) {
@@ -75,7 +81,8 @@ class EditIdeaFragment : MvvmFragment<EditIdeaViewState, EditIdeaViewModel>() {
 
     private fun saveChanges(idea: Idea?) {
         val newIdea = Idea(idea?.id ?: "", boardId, ideaName.text.toString(),
-                ideaDescription.text.toString(), ease.progress, confidence.progress, impact.progress)
+                ideaDescription.text.toString(), ease.progress / 10,
+                confidence.progress / 10, impact.progress / 10)
 
         if (idea == null) {
             viewModel.createIdea(newIdea)
@@ -84,8 +91,22 @@ class EditIdeaFragment : MvvmFragment<EditIdeaViewState, EditIdeaViewModel>() {
         }
     }
 
-    private fun validateInput() {
+    private fun updateUI() {
         saveButton.isEnabled = !ideaName.text.isNullOrBlank()
+
+        val ease = ease.adjustedProgress()
+        val confidence = confidence.adjustedProgress()
+        val impact = impact.adjustedProgress()
+
+        easeValue.text = ease.toString()
+        impactValue.text = impact.toString()
+        confidenceValue.text = confidence.toString()
+
+        easeDesc.text = easeArray[ease]
+        confidenceDesc.text = confidenceArray[confidence]
+        impactDesc.text = impactArray[impact]
+
+        totalScoreValue.text = Math.round((ease + confidence + impact).toFloat() / 3).toString()
     }
 
     private fun initViews() {
@@ -94,34 +115,18 @@ class EditIdeaFragment : MvvmFragment<EditIdeaViewState, EditIdeaViewModel>() {
             ideaName.setText(idea.name)
             ideaDescription.setText(idea.description)
 
-            ease.progress = idea.ease
-            impact.progress = idea.impact
-            confidence.progress = idea.confidence
+            ease.progress = idea.ease * SEEK_BAR_FACTOR
+            impact.progress = idea.impact * SEEK_BAR_FACTOR
+            confidence.progress = idea.confidence * SEEK_BAR_FACTOR
         }
 
-        ease.setOnSeekBarChangeListener(object : SimpleOnSeekbarChangeListner() {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                easeValue.text = progress.toString()
-            }
-        })
-        impact.setOnSeekBarChangeListener(object : SimpleOnSeekbarChangeListner() {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                impactValue.text = progress.toString()
-            }
-        })
-        confidence.setOnSeekBarChangeListener(object : SimpleOnSeekbarChangeListner() {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                confidenceValue.text = progress.toString()
-            }
-        })
-
-        easeValue.text = ease.progress.toString()
-        impactValue.text = impact.progress.toString()
-        confidenceValue.text = confidence.progress.toString()
+        ease.setOnSeekBarChangeListener(seekBarListener)
+        impact.setOnSeekBarChangeListener(seekBarListener)
+        confidence.setOnSeekBarChangeListener(seekBarListener)
 
         ideaName.addTextChangedListener(object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable) {
-                validateInput()
+                updateUI()
             }
         })
 
@@ -130,10 +135,33 @@ class EditIdeaFragment : MvvmFragment<EditIdeaViewState, EditIdeaViewModel>() {
         }
     }
 
+    //==========================================================================
+    // private
+    //==========================================================================
+
     override fun createViewModel() =
             ViewModelProviders.of(this, viewModelFactory)[EditIdeaViewModel::class.java]
 
+    private fun SeekBar.adjustedProgress() = (this.progress + 5) / SEEK_BAR_FACTOR
+
     interface FragmentCallbacks {
         fun onIdeaSaved()
+    }
+
+    private inner class SnappingSeekBarListener : SimpleOnSeekBarChangeListener() {
+
+        override fun onStartTrackingTouch(seekBar: SeekBar) {
+            super.onStartTrackingTouch(seekBar)
+            ideaName.clearFocus()
+        }
+
+        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+            updateUI()
+        }
+
+        override fun onStopTrackingTouch(seekBar: SeekBar) {
+            //round down, for example: 94 -> 90
+            seekBar.progress = seekBar.adjustedProgress() * SEEK_BAR_FACTOR
+        }
     }
 }

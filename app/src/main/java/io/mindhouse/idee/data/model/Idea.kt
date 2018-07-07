@@ -3,6 +3,7 @@ package io.mindhouse.idee.data.model
 import android.os.Parcelable
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.IgnoreExtraProperties
+import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 
 /**
@@ -25,4 +26,10 @@ data class Idea(
         val confidence: Int = 10,
         val impact: Int = 10
 
-) : Parcelable
+) : Parcelable {
+
+    @IgnoredOnParcel
+    @get:Exclude
+    val average: Float = (ease + confidence + impact).toFloat() / 3
+
+}

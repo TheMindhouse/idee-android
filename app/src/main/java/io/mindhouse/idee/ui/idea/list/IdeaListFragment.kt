@@ -3,6 +3,9 @@ package io.mindhouse.idee.ui.idea.list
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +27,7 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
     companion object {
         private const val KEY_BOARD = "board"
 
+        //todo change to board id and observe changes!!
         fun newInstance(board: Board? = null): IdeaListFragment {
             val fragment = IdeaListFragment()
             val args = Bundle()
@@ -60,6 +64,13 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(view.context)
 
+        val decoratorDrawable = ContextCompat.getDrawable(view.context, R.drawable.separator_idea_list)
+        if (decoratorDrawable != null) {
+            val decorator = DividerItemDecoration(view.context, LinearLayoutManager.VERTICAL)
+            decorator.setDrawable(decoratorDrawable)
+            recyclerView.addItemDecoration(decorator)
+        }
+
         adapter.onItemClickedListener = { idea, _ ->
             fragmentCallbacks?.onIdeaSelected(idea)
         }
@@ -71,12 +82,33 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
                 startActivity(intent)
             }
         }
+
+        sortOrderButton.setOnClickListener {
+            val ascending = !adapter.comparator.ascending
+            adapter.comparator = adapter.comparator.copy(ascending = ascending)
+        }
+
+        sortButton.setOnClickListener {
+            showSortDialog()
+        }
     }
 
     override fun render(state: IdeaListViewState) {
+        val context = context ?: return
         val name = state.board?.name ?: getString(R.string.app_name)
         activity?.title = name
         adapter.setItems(state.ideas)
+
+        shareStatus.setText(state.shareStatus)
+        val color = if (state.shareStatus == R.string.not_shared) {
+            shareStatus.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_share_gray, 0)
+            ContextCompat.getColor(context, R.color.gray)
+        } else {
+            shareStatus.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_share, 0)
+            ContextCompat.getColor(context, R.color.blue)
+        }
+
+        shareStatus.setTextColor(color)
 
         if (state.isLoading) {
             progressBar.visibility = View.VISIBLE
@@ -89,6 +121,33 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
         } else {
             addIdeaButton.show()
         }
+    }
+
+    //==========================================================================
+    // private
+    //==========================================================================
+
+    private fun showSortDialog() {
+        val context = context ?: return
+        AlertDialog.Builder(context)
+                .setTitle(R.string.sort_by)
+                .setItems(R.array.sorting_options) { _, which ->
+                    onSortingSelected(which)
+                }
+                .show()
+    }
+
+    private fun onSortingSelected(which: Int) {
+        val sorting = when (which) {
+            0 -> IdeaComparator.Mode.AVERAGE
+            1 -> IdeaComparator.Mode.EASE
+            2 -> IdeaComparator.Mode.CONFIDENCE
+            3 -> IdeaComparator.Mode.IMPACT
+            else -> throw IllegalArgumentException("Wrong sorting index: $which")
+        }
+
+        val comparator = adapter.comparator.copy(mode = sorting)
+        adapter.comparator = comparator
     }
 
     //==========================================================================

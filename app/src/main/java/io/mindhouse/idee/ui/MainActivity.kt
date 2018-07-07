@@ -3,14 +3,21 @@ package io.mindhouse.idee.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 import io.mindhouse.idee.R
+import io.mindhouse.idee.data.AuthorizeRepository
 import io.mindhouse.idee.data.model.Board
 import io.mindhouse.idee.data.model.Idea
 import io.mindhouse.idee.ui.account.MyAccountFragment
 import io.mindhouse.idee.ui.base.DefaultActivity
+import io.mindhouse.idee.ui.board.BoardActivity
 import io.mindhouse.idee.ui.idea.IdeaActivity
 import io.mindhouse.idee.ui.idea.list.IdeaListFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.toolbar.*
+import javax.inject.Inject
 
 class MainActivity : DefaultActivity(), IdeaListFragment.FragmentCallbacks {
 
@@ -23,7 +30,13 @@ class MainActivity : DefaultActivity(), IdeaListFragment.FragmentCallbacks {
         set(value) {
             field = value
             ideaListFragment.board = value
+            adjustMenu()
         }
+
+    private var menu: Menu? = null
+
+    @Inject
+    lateinit var authorizeRepository: AuthorizeRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +45,14 @@ class MainActivity : DefaultActivity(), IdeaListFragment.FragmentCallbacks {
 
         initNavigation()
         initFragment()
+        adjustMenu()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_board, menu)
+        this.menu = menu
+        adjustMenu()
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onIdeaSelected(idea: Idea) {
@@ -39,9 +60,31 @@ class MainActivity : DefaultActivity(), IdeaListFragment.FragmentCallbacks {
         startActivity(intent)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.actionBoardOptions -> {
+                val intent = BoardActivity.newIntent(this, selectedBoard)
+                startActivity(intent)
+                true
+            }
+            R.id.actionBoardDelete -> {
+                Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show()
+                true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+
+    }
+
     //==========================================================================
     // private
     //==========================================================================
+
+    private fun adjustMenu() {
+        val me = authorizeRepository.currentUser
+        val deleteItem = menu?.findItem(R.id.actionBoardDelete)
+        deleteItem?.isVisible = !(me != null && selectedBoard?.roleOf(me) != Board.Companion.Role.OWNER)
+    }
 
     private fun initFragment() {
         ideaListFragment = supportFragmentManager.findFragmentById(R.id.container) as? IdeaListFragment

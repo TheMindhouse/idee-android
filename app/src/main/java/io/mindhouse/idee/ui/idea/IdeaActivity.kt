@@ -30,7 +30,7 @@ class IdeaActivity : DefaultActivity(), EditIdeaFragment.FragmentCallbacks {
         setContentView(R.layout.activity_idea)
         initFragment()
 
-        val title = idea?.name ?: getString(R.string.create_idea)
+        val title = if (idea == null) getString(R.string.create_idea) else getString(R.string.edit_idea)
         setTitle(title)
     }
 

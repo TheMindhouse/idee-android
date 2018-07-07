@@ -3,6 +3,7 @@ package io.mindhouse.idee.data
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
+import durdinapps.rxfirebase2.RxCompletableHandler
 import durdinapps.rxfirebase2.RxFirestore
 import io.mindhouse.idee.data.model.Board
 import io.mindhouse.idee.data.model.Idea
@@ -10,6 +11,7 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Single
+import io.reactivex.functions.Function4
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -40,19 +42,16 @@ class BoardsRepository @Inject constructor(
         val readerRef = db.collection("boards").whereEqualTo("roles.${me.email}", ROLE_READER)
         val editorRef = db.collection("boards").whereEqualTo("roles.${me.email}", ROLE_EDITOR)
 
-        //todo uncomment when firestore security rules get fixed
-//        return Flowable.combineLatest(
-//                observeBoardQuery(ownedRef),
-//                observeBoardQuery(adminRef),
-//                observeBoardQuery(readerRef),
-//                observeBoardQuery(editorRef),
-//
-//                Function4 { r1, r2, r3, r4 ->
-//                    r1 + r2 + r3 + r4
-//                }
-//        )
+        return Flowable.combineLatest(
+                observeBoardQuery(ownedRef),
+                observeBoardQuery(adminRef),
+                observeBoardQuery(readerRef),
+                observeBoardQuery(editorRef),
 
-        return observeBoardQuery(ownedRef)
+                Function4 { r1, r2, r3, r4 ->
+                    r1 + r2 + r3 + r4
+                }
+        )
     }
 
     fun getMyBoards(): Single<List<Board>> {
@@ -71,18 +70,22 @@ class BoardsRepository @Inject constructor(
 
     fun updateBoard(board: Board): Completable {
         val docRef = db.collection("boards").document(board.id)
-        return RxFirestore.setDocument(docRef, board, SetOptions.merge())
+
+        return Completable.create {
+            //We override fields
+            emitter -> RxCompletableHandler.assignOnTask<Void>(emitter, docRef.set(board))
+        }
     }
 
-    fun createBoard(name: String): Single<Board> {
+    fun createBoard(board: Board): Single<Board> {
         val me = authorizeRepository.currentUser
                 ?: return Single.error(IllegalArgumentException("Not logged in!"))
 
         val docRef = db.collection("boards")
-        val board = Board("", me.id, name, emptyMap())
+        val toCreate = board.copy(ownerId = me.id)
 
-        return RxFirestore.addDocument(docRef, board)
-                .map { board.copy(id = it.id) }
+        return RxFirestore.addDocument(docRef, toCreate)
+                .map { toCreate.copy(id = it.id) }
     }
 
     fun findBoardById(boardId: String): Maybe<Board> {

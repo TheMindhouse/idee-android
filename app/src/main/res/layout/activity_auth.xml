@@ -4,31 +4,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content"
     android:layout_width="match_parent"
-    android:fitsSystemWindows="true"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_main"
+    android:background="@drawable/gradient_diagonal"
+    android:fitsSystemWindows="true"
     tools:context="io.mindhouse.idee.ui.auth.AuthActivity">
 
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/facebookLoginButton"
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <ImageView
+        android:id="@+id/ideeLogo"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_logo" />
+
+    <Button
+        android:id="@+id/facebookLoginButton"
+        style="@style/Button.Borderless"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:drawablePadding="16dp"
+        android:drawableStart="@drawable/ic_facebook"
+        android:text="@string/login_facebook"
         app:layout_constraintBottom_toTopOf="@+id/googleLoginButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ideeLogo"
         app:layout_constraintVertical_chainStyle="packed" />
 
-    <com.google.android.gms.common.SignInButton
+    <Button
         android:id="@+id/googleLoginButton"
-        android:layout_width="wrap_content"
+        style="@style/Button.Borderless"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:drawablePadding="16dp"
+        android:drawableStart="@drawable/ic_google"
+        android:text="@string/login_google"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,6 +66,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/guideline" />
 
 </android.support.constraint.ConstraintLayout>
