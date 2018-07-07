@@ -10,6 +10,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toTopOf="@id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +26,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/guideline" />
 
-    <!--TODO: default image-->
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/avatar"
         android:layout_width="@dimen/my_account_avatar_size"
