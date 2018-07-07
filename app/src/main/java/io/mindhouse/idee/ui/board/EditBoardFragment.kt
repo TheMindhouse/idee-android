@@ -27,6 +27,7 @@ class EditBoardFragment : MvvmFragment<EditBoardViewState, EditBoardViewModel>()
     companion object {
         private const val KEY_BOARD = "board"
 
+        //observe changes!!
         fun newInstance(board: Board? = null): EditBoardFragment {
             val fragment = EditBoardFragment()
             val args = Bundle()
@@ -79,8 +80,7 @@ class EditBoardFragment : MvvmFragment<EditBoardViewState, EditBoardViewModel>()
             if (board == null) {
                 viewModel.createNewBoard(boardNameText.text.toString())
             } else {
-                val toUpdate = board.copy(name = boardNameText.text.toString())
-                viewModel.updateBoard(toUpdate)
+                viewModel.updateBoard(boardNameText.text.toString())
             }
         }
 

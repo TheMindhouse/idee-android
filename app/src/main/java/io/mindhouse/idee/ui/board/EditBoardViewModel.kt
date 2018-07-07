@@ -28,6 +28,7 @@ class EditBoardViewModel @Inject constructor(
         set(value) {
             field = value
             loadBoardData()
+            //todo update board!
         }
 
     override val initialState = EditBoardViewState(false, false, emptyList(), null)
@@ -52,9 +53,11 @@ class EditBoardViewModel @Inject constructor(
                 )
     }
 
-    fun updateBoard(board: Board) {
+    fun updateBoard(updatedName: String) {
         val state = state.copy(isLoading = true)
         postState(state)
+        board = board.copy(name = updatedName)
+
         boardsRepository.updateBoard(board)
                 .subscribeOn(ioScheduler)
                 .subscribeBy(

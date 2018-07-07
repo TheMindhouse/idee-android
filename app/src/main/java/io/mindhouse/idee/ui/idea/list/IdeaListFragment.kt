@@ -26,6 +26,7 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
     companion object {
         private const val KEY_BOARD = "board"
 
+        //todo change to board id and observe changes!!
         fun newInstance(board: Board? = null): IdeaListFragment {
             val fragment = IdeaListFragment()
             val args = Bundle()

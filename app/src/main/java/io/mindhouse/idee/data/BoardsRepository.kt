@@ -3,6 +3,7 @@ package io.mindhouse.idee.data
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
+import durdinapps.rxfirebase2.RxCompletableHandler
 import durdinapps.rxfirebase2.RxFirestore
 import io.mindhouse.idee.data.model.Board
 import io.mindhouse.idee.data.model.Idea
@@ -69,7 +70,11 @@ class BoardsRepository @Inject constructor(
 
     fun updateBoard(board: Board): Completable {
         val docRef = db.collection("boards").document(board.id)
-        return RxFirestore.setDocument(docRef, board, SetOptions.merge())
+
+        return Completable.create {
+            //We override fields
+            emitter -> RxCompletableHandler.assignOnTask<Void>(emitter, docRef.set(board))
+        }
     }
 
     fun createBoard(board: Board): Single<Board> {
