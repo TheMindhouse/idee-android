@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/actionBoardOptions"
+        android:title="@string/board_options"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/actionBoardDelete"
+        android:title="@string/delete_board"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/actionBoardLeave"
+        android:title="@string/leave_board"
+        app:showAsAction="never" />
+
+</menu>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextViewStyle">
+        <item name="android:textAppearance">@style/TextDefault</item>
+    </style>
+
+    <style name="TextDefault" parent="@android:style/TextAppearance.Small">
+        <item name="android:fontFamily">@font/catamaran_bold</item>
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingExtra">0dp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="TextDefault.Small">
+        <item name="android:fontFamily">@font/catamaran</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextDefault.Small.Label">
+        <item name="android:textColor">@color/blue_transparent</item>
+    </style>
+
+    <style name="TextDefault.Big">
+        <item name="android:textSize">19sp</item>
+    </style>
+
+    <style name="TextDefault.Header">
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="ActionBarTextAppearance" parent="TextDefault.Big">
+
+    </style>
+
+    <style name="EditTextHintTextAppearance" parent="TextDefault.Small">
+        <item name="android:textColor">@color/color_edit_text_hint</item>
+    </style>
+
+</resources>

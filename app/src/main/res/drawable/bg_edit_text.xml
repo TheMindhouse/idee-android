@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" android:enterFadeDuration="@integer/anim_duration_short" android:exitFadeDuration="@integer/anim_duration_short">
+
+    <item android:drawable="@drawable/bg_edit_text_focused" android:state_focused="true" />
+
+    <item android:drawable="@drawable/bg_edit_text_default" />
+
+</selector>
