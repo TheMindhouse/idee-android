@@ -1,9 +1,6 @@
 package io.mindhouse.idee.data
 
-import com.google.firebase.firestore.FieldPath
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.*
 import durdinapps.rxfirebase2.RxCompletableHandler
 import durdinapps.rxfirebase2.RxFirestore
 import io.mindhouse.idee.data.model.Board
@@ -15,6 +12,7 @@ import io.reactivex.Single
 import io.reactivex.functions.Function4
 import javax.inject.Inject
 import javax.inject.Singleton
+
 
 /**
  * Created by kmisztal on 24/06/2018.
@@ -47,7 +45,7 @@ class BoardsRepository @Inject constructor(
         val editorRef = db.collection("boards")
                 .whereEqualTo(FieldPath.of("roles", me.email), ROLE_EDITOR)
 
-        val flowable: Flowable<List<Board>> =  Flowable.combineLatest(
+        val flowable: Flowable<List<Board>> = Flowable.combineLatest(
                 observeBoardQuery(ownedRef),
                 observeBoardQuery(adminRef),
                 observeBoardQuery(readerRef),
@@ -100,6 +98,12 @@ class BoardsRepository @Inject constructor(
     fun delete(board: Board): Completable {
         val ref = db.collection("boards").document(board.id)
         return RxFirestore.deleteDocument(ref)
+    }
+
+    fun removeRole(board: Board, email: String): Completable {
+        val ref = db.collection("boards").document(board.id)
+        return RxFirestore.updateDocument(ref,
+                FieldPath.of("roles", email), FieldValue.delete())
     }
 
     fun findBoardById(boardId: String): Maybe<Board> {

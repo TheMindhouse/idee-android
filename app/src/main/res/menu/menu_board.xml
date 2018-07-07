@@ -12,4 +12,9 @@
         android:title="@string/delete_board"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/actionBoardLeave"
+        android:title="@string/leave_board"
+        app:showAsAction="never" />
+
 </menu>

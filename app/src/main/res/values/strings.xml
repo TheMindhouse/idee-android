@@ -23,6 +23,7 @@
     <string name="wrong_email">E-mail is not valid</string>
     <string name="board_options">Board options</string>
     <string name="delete_board">Delete board</string>
+    <string name="leave_board">Leave board</string>
 
     <!--Ideas-->
     <string name="select_board">Select a board to see ideas</string>

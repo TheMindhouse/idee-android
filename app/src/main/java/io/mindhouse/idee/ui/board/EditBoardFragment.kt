@@ -62,7 +62,6 @@ class EditBoardFragment : MvvmFragment<EditBoardViewState, EditBoardViewModel>()
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(view.context)
-//        recyclerView.itemAnimator = LandingAnimator()
         adapter.onItemClickedListener = { attendee, _ ->
             //attendee removed
             viewModel.removeEmail(attendee.email)

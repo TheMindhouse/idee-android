@@ -28,13 +28,12 @@ class EditBoardViewModel @Inject constructor(
         set(value) {
             field = value
             loadBoardData()
-            //todo update board!
         }
 
     override val initialState = EditBoardViewState(false, false, emptyList(), null)
 
     private val cachedUsers: MutableMap<String, User> = HashMap()
-    private val role = Board.EDITOR
+    private val defaultRole = Board.EDITOR
 
     fun createNewBoard(name: String) {
         val board = board.copy(name = name)
@@ -62,7 +61,7 @@ class EditBoardViewModel @Inject constructor(
 
     fun addEmail(email: String) {
         val roles = board.roles.toMutableMap()
-        roles[email] = role
+        roles[email] = defaultRole
 
         board = board.copy(roles = roles)
     }
@@ -121,7 +120,7 @@ class EditBoardViewModel @Inject constructor(
         val attendees = state.attendees.toMutableList()
         attendees.removeAll { it.email == user.email }
 
-        val attendee = BoardAttendee(user.id, user.name, user.email, user.avatarUrl, role)
+        val attendee = BoardAttendee(user.id, user.name, user.email, user.avatarUrl, defaultRole)
         attendees.add(attendee)
         postState(state.copy(attendees = attendees))
     }
