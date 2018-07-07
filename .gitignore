@@ -11,3 +11,5 @@
 keystore.properties
 *jks
 local.properties
+app/fabric.properties
+app/libs/
