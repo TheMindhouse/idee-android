@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -19,6 +20,10 @@
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"
             android:value="false" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="72f6a20b571f571f174716c34e57057877dcd0d6"/>
 
         <activity
             android:name=".ui.SplashActivity"
