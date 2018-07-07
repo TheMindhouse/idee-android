@@ -7,13 +7,12 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import io.mindhouse.idee.R
 import io.mindhouse.idee.data.model.Board
 import io.mindhouse.idee.data.model.Idea
 import io.mindhouse.idee.ui.base.MvvmFragment
+import io.mindhouse.idee.ui.board.BoardActivity
 import io.mindhouse.idee.ui.idea.IdeaActivity
 import kotlinx.android.synthetic.main.fragment_idea_list.*
 
@@ -27,7 +26,6 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
     companion object {
         private const val KEY_BOARD = "board"
 
-        //todo change to board id and observe changes!!
         fun newInstance(board: Board? = null): IdeaListFragment {
             val fragment = IdeaListFragment()
             val args = Bundle()
@@ -38,6 +36,7 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
         }
     }
 
+    private var menu: Menu? = null
     private val adapter = IdeaRecyclerAdapter()
     var board: Board? = null
         set(value) {
@@ -61,35 +60,34 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(view.context)
+        initViews(view)
+    }
 
-        val decoratorDrawable = ContextCompat.getDrawable(view.context, R.drawable.separator_idea_list)
-        if (decoratorDrawable != null) {
-            val decorator = DividerItemDecoration(view.context, LinearLayoutManager.VERTICAL)
-            decorator.setDrawable(decoratorDrawable)
-            recyclerView.addItemDecoration(decorator)
-        }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_board, menu)
+        this.menu = menu
+        return super.onCreateOptionsMenu(menu, inflater)
+    }
 
-        adapter.onItemClickedListener = { idea, _ ->
-            fragmentCallbacks?.onIdeaSelected(idea)
-        }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val context = context ?: return false
 
-        addIdeaButton.setOnClickListener {
-            val boardId = board?.id
-            if (boardId != null) {
-                val intent = IdeaActivity.newIntent(it.context, boardId)
+        return when (item.itemId) {
+            R.id.actionBoardOptions -> {
+                val intent = BoardActivity.newIntent(context, board)
                 startActivity(intent)
+                true
             }
-        }
-
-        sortOrderButton.setOnClickListener {
-            val ascending = !adapter.comparator.ascending
-            adapter.comparator = adapter.comparator.copy(ascending = ascending)
-        }
-
-        sortButton.setOnClickListener {
-            showSortDialog()
+            R.id.actionBoardDelete -> {
+                viewModel.deleteBoard()
+                true
+            }
+            R.id.actionBoardLeave -> {
+                viewModel.leaveBoard()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -121,6 +119,12 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
         } else {
             addIdeaButton.visibility = View.VISIBLE
         }
+
+        setHasOptionsMenu(state.role != null)
+        menu?.findItem(R.id.actionBoardDelete)?.isVisible = state.role == Board.Companion.Role.OWNER
+        menu?.findItem(R.id.actionBoardLeave)?.isVisible = state.role != Board.Companion.Role.OWNER
+        menu?.findItem(R.id.actionBoardOptions)?.isVisible =
+                state.role in arrayOf(Board.Companion.Role.OWNER, Board.Companion.Role.ADMIN)
     }
 
     //==========================================================================
@@ -148,6 +152,39 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
 
         val comparator = adapter.comparator.copy(mode = sorting)
         adapter.comparator = comparator
+    }
+
+    private fun initViews(view: View) {
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(view.context)
+
+        val decoratorDrawable = ContextCompat.getDrawable(view.context, R.drawable.separator_idea_list)
+        if (decoratorDrawable != null) {
+            val decorator = DividerItemDecoration(view.context, LinearLayoutManager.VERTICAL)
+            decorator.setDrawable(decoratorDrawable)
+            recyclerView.addItemDecoration(decorator)
+        }
+
+        adapter.onItemClickedListener = { idea, _ ->
+            fragmentCallbacks?.onIdeaSelected(idea)
+        }
+
+        addIdeaButton.setOnClickListener {
+            val boardId = board?.id
+            if (boardId != null) {
+                val intent = IdeaActivity.newIntent(it.context, boardId)
+                startActivity(intent)
+            }
+        }
+
+        sortOrderButton.setOnClickListener {
+            val ascending = !adapter.comparator.ascending
+            adapter.comparator = adapter.comparator.copy(ascending = ascending)
+        }
+
+        sortButton.setOnClickListener {
+            showSortDialog()
+        }
     }
 
     //==========================================================================

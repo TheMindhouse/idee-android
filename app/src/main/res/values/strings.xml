@@ -8,9 +8,11 @@
     <!--My Account-->
     <string name="create_board">Create new board</string>
     <string name="user_no_name">Anonymous user</string>
+    <string name="log_out">Log out</string>
 
     <!--Board management-->
-    <string name="create_board_title">Create board</string>
+    <string name="create_board_title">create board</string>
+    <string name="edit_board_title">edit board</string>
     <string name="board_name">Board name</string>
     <string name="share_options">Share options</string>
     <string name="add_email_to_share">Add e-mail to share</string>
@@ -21,6 +23,7 @@
     <string name="wrong_email">E-mail is not valid</string>
     <string name="board_options">Board options</string>
     <string name="delete_board">Delete board</string>
+    <string name="leave_board">Leave board</string>
 
     <!--Ideas-->
     <string name="select_board">Select a board to see ideas</string>

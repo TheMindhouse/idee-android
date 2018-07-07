@@ -11,6 +11,7 @@ import io.mindhouse.idee.ui.base.ViewState
  */
 data class IdeaListViewState(
         val board: Board?,
+        val role: Board.Companion.Role?,
         val shareStatus: Int,
         val ideas: List<Idea>,
         val isLoading: Boolean,

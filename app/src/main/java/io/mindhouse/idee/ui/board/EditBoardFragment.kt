@@ -47,8 +47,6 @@ class EditBoardFragment : MvvmFragment<EditBoardViewState, EditBoardViewModel>()
         super.onAttach(context)
 
         val board = board
-        val title = board?.name ?: getString(R.string.create_board)
-        activity?.title = title
         if (board != null) {
             viewModel.board = board
         }
@@ -57,13 +55,13 @@ class EditBoardFragment : MvvmFragment<EditBoardViewState, EditBoardViewModel>()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.fragment_edit_board, container, false)
 
+    @Suppress("UNUSED_EXPRESSION")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         boardNameText.setText(board?.name)
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(view.context)
-//        recyclerView.itemAnimator = LandingAnimator()
         adapter.onItemClickedListener = { attendee, _ ->
             //attendee removed
             viewModel.removeEmail(attendee.email)

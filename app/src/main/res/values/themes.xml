@@ -21,6 +21,7 @@
         <item name="actionBarStyle">@style/ActionBar</item>
         <item name="seekBarStyle">@style/SeekBar</item>
         <item name="editTextStyle">@style/EditText</item>
+
     </style>
 
     <style name="AppTheme.NoActionBar">

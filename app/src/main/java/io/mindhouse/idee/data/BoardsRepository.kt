@@ -1,8 +1,6 @@
 package io.mindhouse.idee.data
 
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.*
 import durdinapps.rxfirebase2.RxCompletableHandler
 import durdinapps.rxfirebase2.RxFirestore
 import io.mindhouse.idee.data.model.Board
@@ -14,6 +12,7 @@ import io.reactivex.Single
 import io.reactivex.functions.Function4
 import javax.inject.Inject
 import javax.inject.Singleton
+
 
 /**
  * Created by kmisztal on 24/06/2018.
@@ -37,12 +36,16 @@ class BoardsRepository @Inject constructor(
         val me = authorizeRepository.currentUser
                 ?: return Flowable.error(IllegalArgumentException("Not logged in!"))
 
-        val ownedRef = db.collection("boards").whereEqualTo("ownerId", me.id)
-        val adminRef = db.collection("boards").whereEqualTo("roles.${me.email}", ROLE_ADMIN)
-        val readerRef = db.collection("boards").whereEqualTo("roles.${me.email}", ROLE_READER)
-        val editorRef = db.collection("boards").whereEqualTo("roles.${me.email}", ROLE_EDITOR)
+        val ownedRef = db.collection("boards")
+                .whereEqualTo("ownerId", me.id)
+        val adminRef = db.collection("boards")
+                .whereEqualTo(FieldPath.of("roles", me.email), ROLE_ADMIN)
+        val readerRef = db.collection("boards")
+                .whereEqualTo(FieldPath.of("roles", me.email), ROLE_READER)
+        val editorRef = db.collection("boards")
+                .whereEqualTo(FieldPath.of("roles", me.email), ROLE_EDITOR)
 
-        return Flowable.combineLatest(
+        val flowable: Flowable<List<Board>> = Flowable.combineLatest(
                 observeBoardQuery(ownedRef),
                 observeBoardQuery(adminRef),
                 observeBoardQuery(readerRef),
@@ -52,6 +55,9 @@ class BoardsRepository @Inject constructor(
                     r1 + r2 + r3 + r4
                 }
         )
+
+        return flowable.map { it.distinct() }
+
     }
 
     fun getMyBoards(): Single<List<Board>> {
@@ -73,7 +79,8 @@ class BoardsRepository @Inject constructor(
 
         return Completable.create {
             //We override fields
-            emitter -> RxCompletableHandler.assignOnTask<Void>(emitter, docRef.set(board))
+            emitter ->
+            RxCompletableHandler.assignOnTask<Void>(emitter, docRef.set(board))
         }
     }
 
@@ -86,6 +93,17 @@ class BoardsRepository @Inject constructor(
 
         return RxFirestore.addDocument(docRef, toCreate)
                 .map { toCreate.copy(id = it.id) }
+    }
+
+    fun delete(board: Board): Completable {
+        val ref = db.collection("boards").document(board.id)
+        return RxFirestore.deleteDocument(ref)
+    }
+
+    fun removeRole(board: Board, email: String): Completable {
+        val ref = db.collection("boards").document(board.id)
+        return RxFirestore.updateDocument(ref,
+                FieldPath.of("roles", email), FieldValue.delete())
     }
 
     fun findBoardById(boardId: String): Maybe<Board> {

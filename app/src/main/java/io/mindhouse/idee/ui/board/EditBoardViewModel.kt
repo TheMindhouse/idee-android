@@ -28,47 +28,40 @@ class EditBoardViewModel @Inject constructor(
         set(value) {
             field = value
             loadBoardData()
-            //todo update board!
         }
 
     override val initialState = EditBoardViewState(false, false, emptyList(), null)
 
     private val cachedUsers: MutableMap<String, User> = HashMap()
-    private val role = Board.EDITOR
+    private val defaultRole = Board.EDITOR
 
     fun createNewBoard(name: String) {
-        val state = state.copy(isLoading = true)
-        postState(state)
-
         val board = board.copy(name = name)
         boardsRepository.createBoard(board)
                 .subscribeOn(ioScheduler)
                 .subscribeBy(
-                        onSuccess = {
-                            //Change should be observed, no need to do anything
-                            postState(state.copy(isLoading = false, isSaved = true))
-                            Timber.i("Successfully created board: $name")
-                        },
+                        onSuccess = { Timber.i("Successfully created board: $name") },
                         onError = { onError(it, "creating board") }
                 )
+
+        postState(state.copy(isSaved = true))
     }
 
     fun updateBoard(updatedName: String) {
-        val state = state.copy(isLoading = true)
-        postState(state)
         board = board.copy(name = updatedName)
-
         boardsRepository.updateBoard(board)
                 .subscribeOn(ioScheduler)
                 .subscribeBy(
-                        onComplete = { postState(state.copy(isLoading = false, isSaved = true)) },
+                        onComplete = { Timber.i("Successfully updated board: $board") },
                         onError = { onError(it, "updating board") }
                 )
+
+        postState(state.copy(isSaved = true))
     }
 
     fun addEmail(email: String) {
         val roles = board.roles.toMutableMap()
-        roles[email] = role
+        roles[email] = defaultRole
 
         board = board.copy(roles = roles)
     }
@@ -127,7 +120,7 @@ class EditBoardViewModel @Inject constructor(
         val attendees = state.attendees.toMutableList()
         attendees.removeAll { it.email == user.email }
 
-        val attendee = BoardAttendee(user.id, user.name, user.email, user.avatarUrl, role)
+        val attendee = BoardAttendee(user.id, user.name, user.email, user.avatarUrl, defaultRole)
         attendees.add(attendee)
         postState(state.copy(attendees = attendees))
     }

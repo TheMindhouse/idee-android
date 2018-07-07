@@ -6,6 +6,7 @@ import com.google.firebase.auth.*
 import durdinapps.rxfirebase2.RxFirebaseAuth
 import io.mindhouse.idee.data.model.User
 import io.mindhouse.idee.di.qualifier.IOScheduler
+import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.rxkotlin.subscribeBy
@@ -39,6 +40,13 @@ class AuthorizeRepository @Inject constructor(
         upsertMe()
     }
 
+    fun observeAuthState(): Observable<Boolean> {
+        return RxFirebaseAuth.observeAuthState(auth)
+                .subscribeOn(ioScheduler)
+                .doOnNext { Timber.d("Auth state change. Current user: ${it.currentUser}") }
+                .map { it.currentUser != null }
+    }
+
     fun signInWithFacebook(token: AccessToken): Single<User> {
         val credential = FacebookAuthProvider.getCredential(token.token)
         return signInWithCredential(credential)
@@ -47,6 +55,10 @@ class AuthorizeRepository @Inject constructor(
     fun signInWithGoogle(account: GoogleSignInAccount): Single<User> {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         return signInWithCredential(credential)
+    }
+
+    fun logout() {
+        auth.signOut()
     }
 
     private fun signInWithCredential(credential: AuthCredential): Single<User> {
