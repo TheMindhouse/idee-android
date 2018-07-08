@@ -10,6 +10,7 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import io.fabric.sdk.android.Fabric
+import io.mindhouse.idee.di.component.DaggerAppComponent
 import timber.log.Timber
 import javax.inject.Inject
 

@@ -32,7 +32,7 @@
         android:layout_height="@dimen/my_account_avatar_size"
         android:layout_marginStart="8dp"
         android:src="@drawable/ic_user_default"
-        app:layout_constraintBottom_toBottomOf="@+id/guideline"
+        app:layout_constraintBottom_toTopOf="@+id/userName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.28" />
+        app:layout_constraintGuide_percent="@dimen/my_account_header_height" />
 
     <TextView
         android:id="@+id/userName"
@@ -50,10 +50,21 @@
         android:layout_marginStart="8dp"
         android:includeFontPadding="false"
         android:textAppearance="@style/TextDefault.Big"
+        app:layout_constraintBottom_toTopOf="@+id/email"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Enrique Iglesias" />
+
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:includeFontPadding="false"
+        android:textAppearance="@style/TextDefault.Small"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/avatar"
-        tools:text="Enrique Iglesias" />
+        tools:text="eiglesias@gmail.com" />
 
     <ImageButton
         android:id="@+id/moreButton"
