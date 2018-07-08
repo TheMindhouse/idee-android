@@ -108,13 +108,12 @@
         android:id="@+id/addIdeaButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:foreground="?selectableItemBackground"
-        android:elevation="4dp"
-        android:layout_marginEnd="8dp"
-        android:stateListAnimator="@animator/state_list_animator_fab"
+        android:layout_margin="16dp"
         android:background="@drawable/ic_fab"
+        android:elevation="4dp"
+        android:foreground="?selectableItemBackground"
         android:padding="24dp"
+        android:stateListAnimator="@animator/state_list_animator_fab"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
