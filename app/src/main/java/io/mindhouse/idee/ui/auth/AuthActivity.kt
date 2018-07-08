@@ -13,6 +13,8 @@ import android.support.transition.TransitionManager
 import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.WindowManager
+import com.crashlytics.android.answers.Answers
+import com.crashlytics.android.answers.LoginEvent
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -88,6 +90,7 @@ class AuthActivity : MvvmActivity<AuthViewState, AuthViewModel>() {
         if (state.isLoggedId) {
             val intent = MainActivity.newIntent(this)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            Answers.getInstance().logLogin(LoginEvent())
 
             startActivity(intent)
         }
