@@ -9,6 +9,7 @@
             android:tint="@color/blue_transparent">
 
             <solid android:color="@color/blue_transparent" />
+            <size android:height="@dimen/seek_bar_height_big" />
 
         </shape>
     </item>
