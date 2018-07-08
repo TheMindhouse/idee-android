@@ -1,7 +1,7 @@
 # Ideé - memorize your ideas
 [![CircleCI](https://circleci.com/gh/TheMindhouse/idee-android/tree/master.svg?style=svg)](https://circleci.com/gh/TheMindhouse/idee-android/tree/master)
 
-Idée app for Android platform. Go to [Idée homepage](www.idee.mindhouse.io) to find out more options. 
+Idée app for Android platform. Go to [Idée homepage](https://www.idee.mindhouse.io) to find out more options. 
 
 ## Google play 
 
