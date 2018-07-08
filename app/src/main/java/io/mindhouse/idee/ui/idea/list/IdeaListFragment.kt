@@ -3,11 +3,13 @@ package io.mindhouse.idee.ui.idea.list
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
 import io.mindhouse.idee.R
 import io.mindhouse.idee.data.model.Board
@@ -26,6 +28,7 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
 
     companion object {
         private const val KEY_BOARD = "board"
+        private const val UNDO_DURATION_MS = 2500
 
         fun newInstance(board: Board? = null): IdeaListFragment {
             val fragment = IdeaListFragment()
@@ -192,7 +195,22 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
     }
 
     private fun configureSwipeToDelete(recyclerView: RecyclerView) {
+        val swipeCallback = SwipeOutRecyclerCallback()
+        val helper = ItemTouchHelper(swipeCallback)
+        helper.attachToRecyclerView(recyclerView)
 
+        swipeCallback.onSwipedOut = { position ->
+            scheduleIdeaDeletion(adapter.data[position])
+        }
+    }
+
+    private fun scheduleIdeaDeletion(idea: Idea) {
+        viewModel.scheduleDeletion(idea, UNDO_DURATION_MS.toLong())
+        view?.let {
+            Snackbar.make(it, R.string.idea_deleted, UNDO_DURATION_MS)
+                    .setAction(R.string.undo) { viewModel.cancelScheduledDeletion() }
+                    .show()
+        }
     }
 
     private fun showConfirmationDialog(title: Int = R.string.irreversible_action_title,
@@ -222,3 +240,4 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
         fun onIdeaSelected(idea: Idea)
     }
 }
+

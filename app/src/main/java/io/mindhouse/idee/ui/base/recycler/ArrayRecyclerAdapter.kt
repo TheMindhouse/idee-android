@@ -10,7 +10,8 @@ import android.support.v7.widget.RecyclerView
  */
 abstract class ArrayRecyclerAdapter<T : Any, VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>() {
 
-    protected var data: MutableList<T> = ArrayList()
+    var data: MutableList<T> = ArrayList()
+        protected set
 
     var onItemClickedListener: ((T, Int) -> Unit)? = null
 
@@ -26,11 +27,15 @@ abstract class ArrayRecyclerAdapter<T : Any, VH : RecyclerView.ViewHolder> : Rec
         notifyItemInserted(data.size - 1)
     }
 
+    fun remove(index: Int) {
+        data.removeAt(index)
+        notifyItemRemoved(index)
+    }
+
     fun remove(item: T) {
         val index = data.indexOf(item)
         if (index != -1) {
-            data.removeAt(index)
-            notifyItemRemoved(index)
+            remove(index)
         }
     }
 

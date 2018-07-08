@@ -57,6 +57,9 @@ class IdeaRecyclerAdapter : ArrayRecyclerAdapter<Idea, IdeaRecyclerAdapter.ViewH
     //==========================================================================
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val foreground: ViewGroup = view.foregroundLayout
+        val background: ViewGroup = view.backgroundLayout
+
         val ideaName: TextView = view.ideaName
         val ease: SeekBar = view.ease
         val confidence: SeekBar = view.confidence
