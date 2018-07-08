@@ -80,7 +80,8 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
                 true
             }
             R.id.actionBoardDelete -> {
-                viewModel.deleteBoard()
+                showConfirmationDialog(message = R.string.warning_board_deletion,
+                        action = Runnable { viewModel.deleteBoard() })
                 true
             }
             R.id.actionBoardLeave -> {
@@ -184,6 +185,24 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
 
         sortButton.setOnClickListener {
             showSortDialog()
+        }
+    }
+
+    private fun showConfirmationDialog(title: Int = R.string.irreversible_action_title,
+                                       message: Int = R.string.irreversible_action_message,
+                                       action: Runnable) {
+        context?.let { context ->
+            AlertDialog.Builder(context)
+                    .setTitle(title)
+                    .setMessage(message)
+                    .setPositiveButton(R.string.ok) { dialog, _ ->
+                        dialog.dismiss()
+                        action.run()
+                    }
+                    .setNegativeButton(R.string.cancel) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
         }
     }
 
