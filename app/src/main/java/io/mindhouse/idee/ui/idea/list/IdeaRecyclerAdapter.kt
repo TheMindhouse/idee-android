@@ -67,7 +67,7 @@ class IdeaRecyclerAdapter : ArrayRecyclerAdapter<Idea, IdeaRecyclerAdapter.ViewH
         val average: TextView = view.average
 
         init {
-            view.setOnClickListener {
+            foreground.setOnClickListener {
                 onPositionClicked(adapterPosition)
             }
         }
