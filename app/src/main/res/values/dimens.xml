@@ -3,6 +3,7 @@
 
     <dimen name="my_account_avatar_size">64dp</dimen>
     <dimen name="nav_drawer_width">280dp</dimen>
+    <item name="my_account_header_height" type="dimen">0.28</item>
 
     <dimen name="seek_bar_height_big">30dp</dimen>
     <dimen name="seek_bar_height_small">6dp</dimen>

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import com.crashlytics.android.Crashlytics
 import com.google.firebase.FirebaseApp
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -20,6 +21,8 @@ import javax.inject.Inject
  * @author Krzysztof Misztal
  */
 open class App : Application(), HasActivityInjector {
+
+    private lateinit var analytics: FirebaseAnalytics
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
@@ -59,6 +62,9 @@ open class App : Application(), HasActivityInjector {
 
         if (BuildConfig.DEBUG) {
             FirebaseFirestore.setLoggingEnabled(true)
+
+        } else {
+            analytics = FirebaseAnalytics.getInstance(this)
         }
     }
 }

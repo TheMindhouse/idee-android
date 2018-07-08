@@ -4,4 +4,8 @@
     <item name="idea_list_seek_bars_start" type="dimen">0.6</item>
     <item name="idea_list_seek_bars_end" type="dimen">0.9</item>
 
+    <dimen name="nav_drawer_width">380dp</dimen>
+    <item name="my_account_header_height" type="dimen">0.45</item>
+
+
 </resources>

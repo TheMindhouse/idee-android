@@ -141,6 +141,12 @@ class BoardsRepository @Inject constructor(
         return RxFirestore.setDocument(ref, idea, SetOptions.merge())
     }
 
+    fun deleteIdea(idea: Idea): Completable {
+        val ref = db.collection("boards").document(idea.boardId)
+                .collection("ideas").document(idea.id)
+
+        return RxFirestore.deleteDocument(ref)
+    }
     //==========================================================================
 
     private fun observeBoardQuery(query: Query): Flowable<List<Board>> {

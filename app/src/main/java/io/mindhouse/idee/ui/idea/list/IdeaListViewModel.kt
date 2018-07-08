@@ -8,10 +8,13 @@ import io.mindhouse.idee.data.model.Board
 import io.mindhouse.idee.data.model.Idea
 import io.mindhouse.idee.di.qualifier.IOScheduler
 import io.mindhouse.idee.ui.base.BaseViewModel
+import io.reactivex.Observable
 import io.reactivex.Scheduler
+import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -29,6 +32,9 @@ class IdeaListViewModel @Inject constructor(
     override val initialState = IdeaListViewState(null, null, R.string.not_shared, emptyList(), false)
 
     private var ideasDisposable: Disposable? = null
+
+    private var deleteDisposable: Disposable? = null
+    private var toDelete: Set<Idea>? = null
 
     var board: Board? = null
         set(value) {
@@ -59,6 +65,43 @@ class IdeaListViewModel @Inject constructor(
                         onError = { onError(it, "leaving board") }
 
                 )
+    }
+
+    fun scheduleDeletion(idea: Idea, millis: Long) {
+        val toDelete = HashSet<Idea>()
+        toDelete.add(idea)
+        val oldToDelete = this.toDelete
+        if (oldToDelete != null) {
+            toDelete.addAll(oldToDelete)
+        }
+
+        this.toDelete = toDelete
+        deleteDisposable?.dispose()
+        deleteDisposable = Single.just(toDelete)
+                .delay(millis, TimeUnit.MILLISECONDS)
+                .flatMapObservable { Observable.fromIterable(it) }
+                .flatMapCompletable { boardsRepository.deleteIdea(it) }
+                .subscribeBy(
+                        onComplete = {
+                            Timber.d("Ideas deleted.")
+                            this.toDelete = null
+                        },
+                        onError = { onError(it, "deleting ideas") }
+                )
+
+        //republish ideas
+        onIdeas(state.ideas)
+    }
+
+    fun cancelScheduledDeletion() {
+        deleteDisposable?.dispose()
+        val ideas = state.ideas.toMutableList()
+        this.toDelete?.let {
+            ideas.addAll(it)
+        }
+        this.toDelete = null
+
+        onIdeas(ideas)
     }
 
     //==========================================================================
@@ -98,7 +141,11 @@ class IdeaListViewModel @Inject constructor(
     }
 
     private fun onIdeas(ideas: List<Idea>) {
-        postState(state.copy(isLoading = false, ideas = ideas))
+        val visible = ideas.toMutableList()
+        toDelete?.let {
+            visible.removeAll(toDelete as Iterable<Idea>)
+        }
+        postState(state.copy(isLoading = false, ideas = visible))
     }
 
     private fun onError(throwable: Throwable, action: String) {

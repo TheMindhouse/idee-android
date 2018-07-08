@@ -82,7 +82,10 @@ class EditBoardViewModel @Inject constructor(
         val attendees = ArrayList<BoardAttendee>()
         val toFetch = ArrayList<String>()
 
-        board.roles.forEach { email, role ->
+        board.roles.forEach { entry ->
+            val email = entry.key
+            val role = entry.value
+
             val user = cachedUsers[email]
             if (user != null) {
                 val attendee = BoardAttendee(user.id, user.name, email, user.avatarUrl, role)

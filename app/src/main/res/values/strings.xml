@@ -40,6 +40,11 @@
     <string name="shared_to_you">Shared to you</string>
     <string name="not_shared">Not shared</string>
     <string name="sort_by">Sort ideas by:</string>
+    <string name="irreversible_action_title">Are you sure?</string>
+    <string name="irreversible_action_message">This action is irreversible.</string>
+    <string name="warning_board_deletion">Deleting board is irreversible. You and all invitees will loose access to all brilliant ideas defined in the board. Think twice before tapping OK button.</string>
+    <string name="warning_board_leave">Leaving board is irreversible. To regain an access you will have to be invited again.</string>
+    <string name="idea_deleted">Idea deleted</string>
 
     <string-array name="sorting_options">
         <item>average note</item>
@@ -93,6 +98,9 @@
     <!--Generic-->
     <string name="save">Save</string>
     <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="undo">Undo</string>
 
     <!--Errors-->
     <string name="error_unknown">Something went wrong :(</string>

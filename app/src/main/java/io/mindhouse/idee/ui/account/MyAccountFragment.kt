@@ -62,6 +62,7 @@ class MyAccountFragment : MvvmFragment<MyAccountViewState, MyAccountViewModel>()
 
     override fun render(state: MyAccountViewState) {
         userName.text = state.me?.name ?: getString(R.string.user_no_name)
+        email.text = state.me?.email ?: ""
         if (state.me?.avatarUrl != null) {
             Picasso.get().load(state.me.avatarUrl).into(avatar)
         }
