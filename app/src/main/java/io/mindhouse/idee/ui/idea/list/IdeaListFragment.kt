@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.*
 import io.mindhouse.idee.R
 import io.mindhouse.idee.data.model.Board
@@ -85,7 +86,8 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
                 true
             }
             R.id.actionBoardLeave -> {
-                viewModel.leaveBoard()
+                showConfirmationDialog(message = R.string.warning_board_leave,
+                        action = Runnable { viewModel.leaveBoard() })
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -158,6 +160,7 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
     private fun initViews(view: View) {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(view.context)
+        configureSwipeToDelete(recyclerView)
 
         val decoratorDrawable = ContextCompat.getDrawable(view.context, R.drawable.separator_idea_list)
         if (decoratorDrawable != null) {
@@ -186,6 +189,10 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
         sortButton.setOnClickListener {
             showSortDialog()
         }
+    }
+
+    private fun configureSwipeToDelete(recyclerView: RecyclerView) {
+
     }
 
     private fun showConfirmationDialog(title: Int = R.string.irreversible_action_title,
