@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
-    android:stateListAnimator="@animator/state_list_animator_fab"
+    android:stateListAnimator="@animator/state_list_animator_item_idea"
     android:foreground="?android:selectableItemBackground"
     android:paddingEnd="@dimen/idea_list_horizontal_padding"
     android:paddingStart="@dimen/idea_list_horizontal_padding">
