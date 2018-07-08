@@ -78,7 +78,6 @@ class EditBoardViewModel @Inject constructor(
     //==========================================================================
 
     private fun loadBoardData() {
-        clearDisposables()
         val attendees = ArrayList<BoardAttendee>()
         val toFetch = ArrayList<String>()
 
@@ -120,11 +119,16 @@ class EditBoardViewModel @Inject constructor(
 
         cachedUsers[user.email] = user
 
-        val attendees = state.attendees.toMutableList()
-        attendees.removeAll { it.email == user.email }
+        val attendees = ArrayList<BoardAttendee>()
+        state.attendees.forEach { attendee ->
+            val cached = cachedUsers[attendee.email]
+            if (cached != null) {
+                attendees.add(BoardAttendee(cached.id, cached.name, attendee.email, cached.avatarUrl, attendee.role))
+            } else {
+                attendees.add(attendee)
+            }
+        }
 
-        val attendee = BoardAttendee(user.id, user.name, user.email, user.avatarUrl, defaultRole)
-        attendees.add(attendee)
         postState(state.copy(attendees = attendees))
     }
 
