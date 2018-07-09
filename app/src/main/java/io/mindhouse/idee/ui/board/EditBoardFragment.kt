@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.support.transition.TransitionManager
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
@@ -116,7 +117,18 @@ class EditBoardFragment : MvvmFragment<EditBoardViewState, EditBoardViewModel>()
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(view.context)
 
-        val swipeCallback = SwipeOutRecyclerCallback()
+        val swipeCallback = object : SwipeOutRecyclerCallback() {
+            override fun getSwipeDirs(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?): Int {
+                val position = viewHolder?.adapterPosition
+                if (position != null && adapter.data[position].role == R.string.role_owner) {
+                    //we don't swipe owner!
+                    return 0
+                }
+
+                return super.getSwipeDirs(recyclerView, viewHolder)
+            }
+        }
+
         val helper = ItemTouchHelper(swipeCallback)
         helper.attachToRecyclerView(recyclerView)
         swipeCallback.onSwipedOut = { position ->

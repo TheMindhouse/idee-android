@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.View
 
-class SwipeOutRecyclerCallback : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+open class SwipeOutRecyclerCallback : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
     var onSwipedOut: ((Int) -> Unit)? = null
 
