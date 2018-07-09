@@ -1,16 +1,21 @@
 package io.mindhouse.idee.ui.board
 
 import io.mindhouse.idee.ExceptionHandler
+import io.mindhouse.idee.R
 import io.mindhouse.idee.data.BoardsRepository
 import io.mindhouse.idee.data.UsersRepository
 import io.mindhouse.idee.data.model.Board
 import io.mindhouse.idee.data.model.User
 import io.mindhouse.idee.di.qualifier.IOScheduler
 import io.mindhouse.idee.ui.base.BaseViewModel
+import io.mindhouse.idee.utils.isEmail
+import io.reactivex.Maybe
 import io.reactivex.Scheduler
 import io.reactivex.rxkotlin.subscribeBy
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 /**
  * Created by kmisztal on 28/06/2018.
@@ -30,7 +35,7 @@ class EditBoardViewModel @Inject constructor(
             loadBoardData()
         }
 
-    override val initialState = EditBoardViewState(false, false, emptyList(), null)
+    override val initialState = EditBoardViewState(false, false, emptyList())
 
     private val cachedUsers: MutableMap<String, User> = HashMap()
     private val defaultRole = Board.EDITOR
@@ -78,54 +83,84 @@ class EditBoardViewModel @Inject constructor(
     //==========================================================================
 
     private fun loadBoardData() {
-        clearDisposables()
         val attendees = ArrayList<BoardAttendee>()
         val toFetch = ArrayList<String>()
 
+        val owner = cachedUsers[board.ownerId]
+        if (owner?.email != null) {
+            attendees.add(BoardAttendee(owner.id, owner.name, owner.email, owner.avatarUrl, R.string.role_owner))
+        } else {
+            toFetch.add(board.ownerId)
+        }
+
         board.roles.forEach { entry ->
             val email = entry.key
-            val role = entry.value
+            val roleRes = parseRole(entry.value).nameRes
 
             val user = cachedUsers[email]
             if (user != null) {
-                val attendee = BoardAttendee(user.id, user.name, email, user.avatarUrl, role)
+                val attendee = BoardAttendee(user.id, user.name, email, user.avatarUrl, roleRes)
                 attendees.add(attendee)
             } else {
-                val attendee = BoardAttendee(null, null, email, null, role)
+                val attendee = BoardAttendee(null, null, email, null, roleRes)
                 attendees.add(attendee)
                 toFetch.add(email)
             }
         }
 
         postState(initialState.copy(attendees = attendees))
-        toFetch.forEach { fetchUserByEmail(it) }
+        fetchUsers(toFetch)
     }
 
-    private fun fetchUserByEmail(email: String) {
-        val disposable = usersRepository.findUserByEmail(email)
+    private fun fetchUsers(identifiers: List<String>) {
+        if (identifiers.isEmpty()) return
+
+        val sources = ArrayList<Maybe<User>>()
+        identifiers.forEach {
+            val publisher = if (it.isEmail) {
+                usersRepository.findUserByEmail(it)
+            } else {
+                usersRepository.findUserById(it)
+            }
+            sources.add(publisher)
+        }
+
+        val disposable = Maybe.merge(sources)
                 .subscribeOn(ioScheduler)
+                .observeOn(ioScheduler)
+                .doOnNext { cacheUser(it) }
                 .subscribeBy(
-                        onSuccess = ::onUserFetched,
-                        onError = { onError(it, "fetching user") }
+                        onError = { onError(it, "fetching users") },
+                        onComplete = { rebuildAttendees() }
                 )
 
         addDisposable(disposable)
     }
 
-    private fun onUserFetched(user: User) {
-        if (user.email == null) {
-            Timber.e("Error, fetched user has null email: $user")
-            return
+    private fun rebuildAttendees() {
+        val attendees = LinkedHashSet<BoardAttendee>()
+
+        val owner = cachedUsers[board.ownerId]
+        if (owner?.email != null) {
+            attendees.add(BoardAttendee(owner.id, owner.name, owner.email, owner.avatarUrl, R.string.role_owner))
         }
 
-        cachedUsers[user.email] = user
+        state.attendees.forEach { attendee ->
+            val cached = cachedUsers[attendee.email]
+            if (cached != null) {
+                attendees.add(BoardAttendee(cached.id, cached.name, attendee.email, cached.avatarUrl, attendee.role))
+            } else {
+                attendees.add(attendee)
+            }
+        }
 
-        val attendees = state.attendees.toMutableList()
-        attendees.removeAll { it.email == user.email }
+        postState(state.copy(attendees = attendees.toList()))
+    }
 
-        val attendee = BoardAttendee(user.id, user.name, user.email, user.avatarUrl, defaultRole)
-        attendees.add(attendee)
-        postState(state.copy(attendees = attendees))
+    private fun cacheUser(user: User) {
+        if (user.email != null)
+            cachedUsers[user.email] = user
+        cachedUsers[user.id] = user
     }
 
     private fun onError(throwable: Throwable, action: String) {
@@ -133,5 +168,15 @@ class EditBoardViewModel @Inject constructor(
         val msg = exceptionHandler.getErrorMessage(throwable)
         val newState = state.copy(isLoading = false, errorMessage = msg)
         postState(newState)
+    }
+
+    private fun parseRole(role: String): Board.Companion.Role {
+        return when (role) {
+            Board.ADMIN -> Board.Companion.Role.ADMIN
+            Board.READER -> Board.Companion.Role.READER
+            Board.EDITOR -> Board.Companion.Role.EDITOR
+            else -> Board.Companion.Role.UNKNOWN
+        }
+
     }
 }

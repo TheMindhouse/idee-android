@@ -47,7 +47,7 @@
         android:id="@+id/userName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:includeFontPadding="false"
         android:textAppearance="@style/TextDefault.Big"
         app:layout_constraintBottom_toTopOf="@+id/email"
@@ -59,7 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:includeFontPadding="false"
         android:textAppearance="@style/TextDefault.Small"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
@@ -81,12 +81,16 @@
     <Button
         android:id="@+id/addBoardButton"
         style="@style/Button.Borderless"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
+        android:drawablePadding="8dp"
+        android:drawableStart="@drawable/ic_plus"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
         android:text="@string/create_board"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <android.support.v7.widget.RecyclerView

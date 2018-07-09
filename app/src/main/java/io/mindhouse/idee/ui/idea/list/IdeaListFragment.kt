@@ -17,6 +17,7 @@ import io.mindhouse.idee.data.model.Idea
 import io.mindhouse.idee.ui.base.MvvmFragment
 import io.mindhouse.idee.ui.board.BoardActivity
 import io.mindhouse.idee.ui.idea.IdeaActivity
+import io.mindhouse.idee.ui.utils.SwipeOutRecyclerCallback
 import kotlinx.android.synthetic.main.fragment_idea_list.*
 
 /**

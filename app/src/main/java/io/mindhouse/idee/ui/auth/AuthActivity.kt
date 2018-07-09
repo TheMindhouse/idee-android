@@ -59,7 +59,7 @@ class AuthActivity : MvvmActivity<AuthViewState, AuthViewModel>() {
     }
 
     override fun onStop() {
-        gradientAnimator?.end()
+        stopGradientAnimation()
         super.onStop()
     }
 
@@ -155,6 +155,16 @@ class AuthActivity : MvvmActivity<AuthViewState, AuthViewModel>() {
         }
 
         animator.start()
+    }
+
+    private fun stopGradientAnimation() {
+        gradientAnimator?.end()
+
+        val start = ContextCompat.getColor(this, R.color.turquoise)
+        val mid = ContextCompat.getColor(this, R.color.green)
+        val end = ContextCompat.getColor(this, R.color.lime)
+        val gradient = content.background as GradientDrawable
+        gradient.colors = intArrayOf(start, mid, end)
     }
 
 

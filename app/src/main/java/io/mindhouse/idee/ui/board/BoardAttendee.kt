@@ -1,5 +1,7 @@
 package io.mindhouse.idee.ui.board
 
+import android.support.annotation.StringRes
+
 /**
  * Created by kmisztal on 03/07/2018.
  *
@@ -10,5 +12,6 @@ data class BoardAttendee(
         val displayName: String?,
         val email: String,
         val avatar: String?,
-        val role: String
+        @StringRes
+        val role: Int
 )

@@ -1,8 +1,10 @@
 package io.mindhouse.idee.data.model
 
 import android.os.Parcelable
+import android.support.annotation.StringRes
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.IgnoreExtraProperties
+import io.mindhouse.idee.R
 import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 import timber.log.Timber
@@ -27,7 +29,13 @@ data class Board(
         const val READER = "idea_reader"
         const val EDITOR = "idea_editor"
 
-        enum class Role { OWNER, ADMIN, READER, EDITOR }
+        enum class Role(@StringRes val nameRes: Int) {
+            OWNER(R.string.role_owner),
+            ADMIN(R.string.role_admin),
+            READER(R.string.role_reader),
+            EDITOR(R.string.role_editor),
+            UNKNOWN(R.string.role_unknown)
+        }
     }
 
     @IgnoredOnParcel
@@ -45,7 +53,7 @@ data class Board(
             EDITOR -> Role.EDITOR
             else -> {
                 Timber.e("Found not supported role: $role")
-                null
+                Role.UNKNOWN
             }
         }
     }

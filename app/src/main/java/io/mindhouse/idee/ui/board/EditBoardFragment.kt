@@ -3,8 +3,9 @@ package io.mindhouse.idee.ui.board
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
-import android.support.transition.TransitionManager
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import android.widget.Toast
 import io.mindhouse.idee.R
 import io.mindhouse.idee.data.model.Board
 import io.mindhouse.idee.ui.base.MvvmFragment
+import io.mindhouse.idee.ui.utils.SwipeOutRecyclerCallback
 import io.mindhouse.idee.utils.SimpleTextWatcher
 import io.mindhouse.idee.utils.isEmail
 import kotlinx.android.synthetic.main.fragment_edit_board.*
@@ -41,7 +43,7 @@ class EditBoardFragment : MvvmFragment<EditBoardViewState, EditBoardViewModel>()
     var fragmentCallbacks: FragmentCallbacks? = null
 
     private val board: Board? by lazy { arguments?.getParcelable(KEY_BOARD) as? Board }
-    private val adapter = AttendeesRecyclerAdapter(true)
+    private val adapter = AttendeesRecyclerAdapter()
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -58,47 +60,10 @@ class EditBoardFragment : MvvmFragment<EditBoardViewState, EditBoardViewModel>()
     @Suppress("UNUSED_EXPRESSION")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        boardNameText.setText(board?.name)
-
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(view.context)
-        adapter.onItemClickedListener = { attendee, _ ->
-            //attendee removed
-            viewModel.removeEmail(attendee.email)
-        }
-
-        updateView()
-        boardNameText.addTextChangedListener(object : SimpleTextWatcher() {
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                updateView()
-            }
-        })
-        saveButton.setOnClickListener {
-            val board = board
-            if (board == null) {
-                viewModel.createNewBoard(boardNameText.text.toString())
-            } else {
-                viewModel.updateBoard(boardNameText.text.toString())
-            }
-        }
-
-        email.setOnEditorActionListener { editor, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                val email = editor.text.toString()
-                if (!email.isEmail) {
-                    Toast.makeText(editor.context, R.string.wrong_email, Toast.LENGTH_SHORT).show()
-                    false
-                } else {
-                    addAttendee(email)
-                    true
-                }
-            }
-            false
-        }
+        initViews(view)
     }
 
     override fun render(state: EditBoardViewState) {
-        TransitionManager.beginDelayedTransition(view as ViewGroup)
         if (state.isLoading) {
             progressBar.visibility = View.VISIBLE
             saveButton.isEnabled = false
@@ -140,6 +105,66 @@ class EditBoardFragment : MvvmFragment<EditBoardViewState, EditBoardViewModel>()
     private fun updateView() {
         val enabled = !boardNameText.text.isNullOrBlank()
         saveButton.isEnabled = enabled
+    }
+
+    private fun initViews(view: View) {
+        boardNameText.setText(board?.name)
+
+        //recycler view
+
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(view.context)
+
+        val swipeCallback = object : SwipeOutRecyclerCallback() {
+            override fun getSwipeDirs(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?): Int {
+                val position = viewHolder?.adapterPosition
+                if (position != null && adapter.data[position].role == R.string.role_owner) {
+                    //we don't swipe owner!
+                    return 0
+                }
+
+                return super.getSwipeDirs(recyclerView, viewHolder)
+            }
+        }
+
+        val helper = ItemTouchHelper(swipeCallback)
+        helper.attachToRecyclerView(recyclerView)
+        swipeCallback.onSwipedOut = { position ->
+            //attendee removed
+            val attendee = adapter.data[position]
+            viewModel.removeEmail(attendee.email)
+        }
+
+        //texts
+
+        updateView()
+        boardNameText.addTextChangedListener(object : SimpleTextWatcher() {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                updateView()
+            }
+        })
+        saveButton.setOnClickListener {
+            val board = board
+            if (board == null) {
+                viewModel.createNewBoard(boardNameText.text.toString())
+            } else {
+                viewModel.updateBoard(boardNameText.text.toString())
+            }
+        }
+
+        email.setOnEditorActionListener { editor, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val email = editor.text.toString()
+                if (!email.isEmail) {
+                    Toast.makeText(editor.context, R.string.wrong_email, Toast.LENGTH_SHORT).show()
+                    false
+                } else {
+                    addAttendee(email)
+                    true
+                }
+            }
+            false
+        }
     }
 
     //==========================================================================
