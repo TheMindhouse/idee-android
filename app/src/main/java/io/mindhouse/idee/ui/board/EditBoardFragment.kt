@@ -3,7 +3,6 @@ package io.mindhouse.idee.ui.board
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
-import android.support.transition.TransitionManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
@@ -65,7 +64,6 @@ class EditBoardFragment : MvvmFragment<EditBoardViewState, EditBoardViewModel>()
     }
 
     override fun render(state: EditBoardViewState) {
-        TransitionManager.beginDelayedTransition(view as ViewGroup)
         if (state.isLoading) {
             progressBar.visibility = View.VISIBLE
             saveButton.isEnabled = false

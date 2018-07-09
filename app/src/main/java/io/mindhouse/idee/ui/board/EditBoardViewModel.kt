@@ -113,6 +113,8 @@ class EditBoardViewModel @Inject constructor(
     }
 
     private fun fetchUsers(identifiers: List<String>) {
+        if (identifiers.isEmpty()) return
+
         val sources = ArrayList<Maybe<User>>()
         identifiers.forEach {
             val publisher = if (it.isEmail) {
@@ -125,6 +127,7 @@ class EditBoardViewModel @Inject constructor(
 
         val disposable = Maybe.merge(sources)
                 .subscribeOn(ioScheduler)
+                .observeOn(ioScheduler)
                 .doOnNext { cacheUser(it) }
                 .subscribeBy(
                         onError = { onError(it, "fetching users") },
