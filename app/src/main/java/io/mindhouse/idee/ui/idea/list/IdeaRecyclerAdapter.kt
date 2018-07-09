@@ -10,6 +10,7 @@ import android.widget.TextView
 import io.mindhouse.idee.R
 import io.mindhouse.idee.data.model.Idea
 import io.mindhouse.idee.ui.base.recycler.ArrayRecyclerAdapter
+import io.mindhouse.idee.ui.utils.SwipeOutRecyclerCallback
 import kotlinx.android.synthetic.main.item_idea.view.*
 
 /**
@@ -56,9 +57,9 @@ class IdeaRecyclerAdapter : ArrayRecyclerAdapter<Idea, IdeaRecyclerAdapter.ViewH
 
     //==========================================================================
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val foreground: ViewGroup = view.foregroundLayout
-        val background: ViewGroup = view.backgroundLayout
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view), SwipeOutRecyclerCallback.LayeredViewHolder {
+        override val foreground: View = view.foregroundLayout
+        override val background: View = view.backgroundLayout
 
         val ideaName: TextView = view.ideaName
         val ease: SeekBar = view.ease
