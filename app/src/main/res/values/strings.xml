@@ -24,6 +24,11 @@
     <string name="board_options">Board options</string>
     <string name="delete_board">Delete board</string>
     <string name="leave_board">Leave board</string>
+    <string name="role_unknown">unknown role</string>
+    <string name="role_admin">admin</string>
+    <string name="role_owner">owner</string>
+    <string name="role_reader">reader</string>
+    <string name="role_editor">editor</string>
 
     <!--Ideas-->
     <string name="select_board">Select a board to see ideas</string>

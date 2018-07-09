@@ -83,14 +83,14 @@ class EditBoardViewModel @Inject constructor(
 
         board.roles.forEach { entry ->
             val email = entry.key
-            val role = entry.value
+            val roleRes = parseRole(entry.value).nameRes
 
             val user = cachedUsers[email]
             if (user != null) {
-                val attendee = BoardAttendee(user.id, user.name, email, user.avatarUrl, role)
+                val attendee = BoardAttendee(user.id, user.name, email, user.avatarUrl, roleRes)
                 attendees.add(attendee)
             } else {
-                val attendee = BoardAttendee(null, null, email, null, role)
+                val attendee = BoardAttendee(null, null, email, null, roleRes)
                 attendees.add(attendee)
                 toFetch.add(email)
             }
@@ -137,5 +137,15 @@ class EditBoardViewModel @Inject constructor(
         val msg = exceptionHandler.getErrorMessage(throwable)
         val newState = state.copy(isLoading = false, errorMessage = msg)
         postState(newState)
+    }
+
+    private fun parseRole(role: String): Board.Companion.Role {
+        return when (role) {
+            Board.ADMIN -> Board.Companion.Role.ADMIN
+            Board.READER -> Board.Companion.Role.READER
+            Board.EDITOR -> Board.Companion.Role.EDITOR
+            else -> Board.Companion.Role.UNKNOWN
+        }
+
     }
 }

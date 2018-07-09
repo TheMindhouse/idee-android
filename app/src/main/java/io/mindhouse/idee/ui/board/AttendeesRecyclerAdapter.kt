@@ -38,7 +38,7 @@ class AttendeesRecyclerAdapter(
 
         holder.userName.text = attendee.displayName ?: context.getString(R.string.unknown_user)
         holder.email.text = attendee.email
-        holder.role.text = attendee.role
+        holder.role.setText(attendee.role)
 
         if (!hasAdminRole) {
             holder.removeButton.visibility = View.INVISIBLE
