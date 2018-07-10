@@ -6,10 +6,12 @@ import io.mindhouse.idee.ui.MainActivity
 import io.mindhouse.idee.ui.SplashActivity
 import io.mindhouse.idee.ui.account.MyAccountFragment
 import io.mindhouse.idee.ui.auth.AuthActivity
+import io.mindhouse.idee.ui.base.DefaultFragment
 import io.mindhouse.idee.ui.board.BoardActivity
 import io.mindhouse.idee.ui.board.EditBoardFragment
-import io.mindhouse.idee.ui.idea.EditIdeaFragment
 import io.mindhouse.idee.ui.idea.IdeaActivity
+import io.mindhouse.idee.ui.idea.IdeaFragment
+import io.mindhouse.idee.ui.idea.edit.EditIdeaFragment
 import io.mindhouse.idee.ui.idea.list.IdeaListFragment
 
 /**
@@ -46,5 +48,11 @@ abstract class BuildersModule {
 
     @ContributesAndroidInjector
     abstract fun bindIdeaListFragment(): IdeaListFragment
+
+    @ContributesAndroidInjector
+    abstract fun bindIdeaFragment(): IdeaFragment
+
+    @ContributesAndroidInjector
+    abstract fun bindDefaultFragment(): DefaultFragment
 
 }
