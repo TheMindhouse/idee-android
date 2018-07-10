@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_loader">
+
+    <target
+        android:name="tail_container"
+        android:animation="@anim/anim_loader" />
+
+</animated-vector>
