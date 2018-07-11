@@ -17,7 +17,7 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "0.2.3"
-        testInstrumentationRunner "android.support.anim_loader.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -116,8 +116,8 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
 
-    androidTestImplementation 'com.android.support.anim_loader:runner:1.0.2'
-    androidTestImplementation 'com.android.support.anim_loader.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
 
 apply plugin: 'com.google.gms.google-services'

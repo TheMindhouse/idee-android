@@ -2,6 +2,7 @@ package io.mindhouse.idee.ui.widget
 
 import android.content.Context
 import android.graphics.drawable.AnimatedVectorDrawable
+import android.os.Build
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.widget.ImageView
@@ -27,7 +28,10 @@ class IdeeLoader @JvmOverloads constructor(
     }
 
     override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
         animatable.stop()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            animatable.reset()
+        }
+        super.onDetachedFromWindow()
     }
 }
