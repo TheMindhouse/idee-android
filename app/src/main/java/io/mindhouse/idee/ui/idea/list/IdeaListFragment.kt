@@ -5,17 +5,18 @@ import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
+import android.widget.Button
 import io.mindhouse.idee.R
 import io.mindhouse.idee.data.model.Board
 import io.mindhouse.idee.data.model.Idea
 import io.mindhouse.idee.ui.base.MvvmFragment
 import io.mindhouse.idee.ui.board.BoardActivity
+import io.mindhouse.idee.ui.dialog.IdeeDialog
 import io.mindhouse.idee.ui.idea.IdeaActivity
 import io.mindhouse.idee.ui.utils.SwipeOutRecyclerCallback
 import kotlinx.android.synthetic.main.fragment_idea_list.*
@@ -139,22 +140,30 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
     //==========================================================================
 
     private fun showSortDialog() {
-        val context = context ?: return
-        AlertDialog.Builder(context)
-                .setTitle(R.string.sort_by)
-                .setItems(R.array.sorting_options) { _, which ->
-                    onSortingSelected(which)
-                }
-                .show()
+        val dialog = IdeeDialog.newInstance(R.string.sort_by, null, null,
+                null, R.layout.layout_sorting_options)
+
+        dialog.show(fragmentManager, null)
+        val onClickListener = View.OnClickListener {
+            dialog.dismiss()
+            onSortingSelected(it.id)
+        }
+
+        dialog.onShownListener = {
+            dialog.customView?.findViewById<Button>(R.id.average)?.setOnClickListener(onClickListener)
+            dialog.customView?.findViewById<Button>(R.id.ease)?.setOnClickListener(onClickListener)
+            dialog.customView?.findViewById<Button>(R.id.confidence)?.setOnClickListener(onClickListener)
+            dialog.customView?.findViewById<Button>(R.id.impact)?.setOnClickListener(onClickListener)
+        }
     }
 
-    private fun onSortingSelected(which: Int) {
-        val sorting = when (which) {
-            0 -> IdeaComparator.Mode.AVERAGE
-            1 -> IdeaComparator.Mode.EASE
-            2 -> IdeaComparator.Mode.CONFIDENCE
-            3 -> IdeaComparator.Mode.IMPACT
-            else -> throw IllegalArgumentException("Wrong sorting index: $which")
+    private fun onSortingSelected(id: Int) {
+        val sorting = when (id) {
+            R.id.average -> IdeaComparator.Mode.AVERAGE
+            R.id.ease -> IdeaComparator.Mode.EASE
+            R.id.confidence -> IdeaComparator.Mode.CONFIDENCE
+            R.id.impact -> IdeaComparator.Mode.IMPACT
+            else -> throw IllegalArgumentException("Wrong sorting index: $id")
         }
 
         val comparator = adapter.comparator.copy(mode = sorting)
@@ -217,18 +226,11 @@ class IdeaListFragment : MvvmFragment<IdeaListViewState, IdeaListViewModel>() {
     private fun showConfirmationDialog(title: Int = R.string.irreversible_action_title,
                                        message: Int = R.string.irreversible_action_message,
                                        action: Runnable) {
-        context?.let { context ->
-            AlertDialog.Builder(context)
-                    .setTitle(title)
-                    .setMessage(message)
-                    .setPositiveButton(R.string.ok) { dialog, _ ->
-                        dialog.dismiss()
-                        action.run()
-                    }
-                    .setNegativeButton(R.string.cancel) { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                    .show()
+
+        val dialog = IdeeDialog.newInstance(title, message)
+        dialog.show(fragmentManager, null)
+        dialog.onPositiveClickListener = View.OnClickListener {
+            action.run()
         }
     }
 

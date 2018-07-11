@@ -50,6 +50,7 @@
     <string name="warning_board_deletion">Deleting board is irreversible. You and all invitees will loose access to all brilliant ideas defined in the board. Think twice before tapping OK button.</string>
     <string name="warning_board_leave">Leaving board is irreversible. To regain an access you will have to be invited again.</string>
     <string name="idea_deleted">Idea deleted</string>
+    <string name="average_note">average note</string>
 
     <string-array name="sorting_options">
         <item>average note</item>
