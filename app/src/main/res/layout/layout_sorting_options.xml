@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/average"
+        style="@style/Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:includeFontPadding="false"
+        android:paddingEnd="0dp"
+        android:paddingStart="0dp"
+        android:text="@string/average_note"
+        android:textAppearance="@style/TextDefault" />
+
+    <Button
+        android:id="@+id/ease"
+        style="@style/Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingEnd="0dp"
+        android:paddingStart="0dp"
+        android:text="@string/ease"
+        android:textAppearance="@style/TextDefault" />
+
+    <Button
+        android:id="@+id/confidence"
+        style="@style/Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingEnd="0dp"
+        android:paddingStart="0dp"
+        android:text="@string/confidence"
+        android:textAppearance="@style/TextDefault" />
+
+    <Button
+        android:id="@+id/impact"
+        style="@style/Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingEnd="0dp"
+        android:paddingStart="0dp"
+        android:text="@string/impact"
+        android:textAppearance="@style/TextDefault" />
+
+
+</LinearLayout>

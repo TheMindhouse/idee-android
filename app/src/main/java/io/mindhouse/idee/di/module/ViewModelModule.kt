@@ -10,7 +10,7 @@ import io.mindhouse.idee.di.utils.ViewModelKey
 import io.mindhouse.idee.ui.account.MyAccountViewModel
 import io.mindhouse.idee.ui.auth.AuthViewModel
 import io.mindhouse.idee.ui.board.EditBoardViewModel
-import io.mindhouse.idee.ui.idea.EditIdeaViewModel
+import io.mindhouse.idee.ui.idea.edit.EditIdeaViewModel
 import io.mindhouse.idee.ui.idea.list.IdeaListViewModel
 
 @Module

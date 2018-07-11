@@ -1,4 +1,4 @@
-package io.mindhouse.idee.ui.idea
+package io.mindhouse.idee.ui.idea.edit
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -70,8 +70,8 @@ class EditIdeaFragment : MvvmFragment<EditIdeaViewState, EditIdeaViewModel>() {
             progressBar.visibility = View.INVISIBLE
         }
 
-        if (state.isSaved) {
-            fragmentCallbacks?.onIdeaSaved()
+        if (state.savedIdea != null) {
+            fragmentCallbacks?.onIdeaSaved(state.savedIdea)
         }
     }
 
@@ -145,7 +145,7 @@ class EditIdeaFragment : MvvmFragment<EditIdeaViewState, EditIdeaViewModel>() {
     private fun SeekBar.adjustedProgress() = (this.progress + 5) / SEEK_BAR_FACTOR
 
     interface FragmentCallbacks {
-        fun onIdeaSaved()
+        fun onIdeaSaved(updated: Idea)
     }
 
     private inner class SnappingSeekBarListener : SimpleOnSeekBarChangeListener() {

@@ -89,7 +89,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
-    <ProgressBar
+    <io.mindhouse.idee.ui.widget.IdeeLoader
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"

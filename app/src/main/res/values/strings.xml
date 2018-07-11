@@ -6,17 +6,17 @@
     <string name="login_google">login with Google</string>
 
     <!--My Account-->
-    <string name="create_board">Create new board</string>
+    <string name="create_board">create new board</string>
     <string name="user_no_name">Anonymous user</string>
-    <string name="log_out">Log out</string>
+    <string name="log_out">log out</string>
 
     <!--Board management-->
     <string name="create_board_title">create board</string>
     <string name="edit_board_title">edit board</string>
-    <string name="board_name">Board name</string>
+    <string name="board_name">board name</string>
     <string name="share_options">Share options</string>
-    <string name="add_email_to_share">Add e-mail to share</string>
-    <string name="default_board_name">My ideas</string>
+    <string name="add_email_to_share">add e-mail to share</string>
+    <string name="default_board_name">my ideas</string>
     <string name="unknown_user">Unknown user</string>
     <string name="email_address_to_share">e-mail address to share</string>
     <string name="is_not_shared">This board is not shared.\nAdd email addresses that you want to share with.</string>
@@ -34,22 +34,23 @@
     <string name="select_board">Select a board to see ideas</string>
     <string name="hint_idea_name">Idea name</string>
     <string name="hint_idea_description">Description</string>
-    <string name="ease">Ease</string>
-    <string name="impact">Impact</string>
-    <string name="confidence">Confidence</string>
+    <string name="ease">ease</string>
+    <string name="impact">impact</string>
+    <string name="confidence">confidence</string>
     <string name="create_idea">add new idea</string>
     <string name="edit_idea">edit idea</string>
-    <string name="total_score">Total score</string>
+    <string name="total_score">total score</string>
     <string name="sort">sort</string>
-    <string name="shared">Shared</string>
-    <string name="shared_to_you">Shared to you</string>
-    <string name="not_shared">Not shared</string>
+    <string name="shared">shared</string>
+    <string name="shared_to_you">shared to you</string>
+    <string name="not_shared">not shared</string>
     <string name="sort_by">Sort ideas by:</string>
     <string name="irreversible_action_title">Are you sure?</string>
     <string name="irreversible_action_message">This action is irreversible.</string>
     <string name="warning_board_deletion">Deleting board is irreversible. You and all invitees will loose access to all brilliant ideas defined in the board. Think twice before tapping OK button.</string>
     <string name="warning_board_leave">Leaving board is irreversible. To regain an access you will have to be invited again.</string>
     <string name="idea_deleted">Idea deleted</string>
+    <string name="average_note">average note</string>
 
     <string-array name="sorting_options">
         <item>average note</item>
@@ -101,11 +102,11 @@
     </string-array>
 
     <!--Generic-->
-    <string name="save">Save</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
-    <string name="delete">Delete</string>
-    <string name="undo">Undo</string>
+    <string name="save">save</string>
+    <string name="ok">ok</string>
+    <string name="cancel">cancel</string>
+    <string name="delete">delete</string>
+    <string name="undo">undo</string>
 
     <!--Errors-->
     <string name="error_unknown">Something went wrong :(</string>

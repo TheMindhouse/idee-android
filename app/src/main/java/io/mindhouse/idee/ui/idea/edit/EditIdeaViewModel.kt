@@ -1,4 +1,4 @@
-package io.mindhouse.idee.ui.idea
+package io.mindhouse.idee.ui.idea.edit
 
 import io.mindhouse.idee.ExceptionHandler
 import io.mindhouse.idee.data.BoardsRepository
@@ -21,7 +21,7 @@ class EditIdeaViewModel @Inject constructor(
         @IOScheduler private val ioScheduler: Scheduler
 ) : BaseViewModel<EditIdeaViewState>() {
 
-    override val initialState = EditIdeaViewState(false, false)
+    override val initialState = EditIdeaViewState(false, null)
 
     fun createIdea(idea: Idea) {
         boardsRepository.createIdea(idea)
@@ -29,12 +29,12 @@ class EditIdeaViewModel @Inject constructor(
                 .subscribeBy(
                         onSuccess = {
                             Timber.d("Successfully created idea: $idea")
-                            postState(state.copy(isLoading = false, isSaved = true))
+                            postState(state.copy(isLoading = false, savedIdea = idea))
                         },
                         onError = { onError(it, "creating idea") }
                 )
 
-        postState(state.copy(isSaved = true))
+        postState(state.copy(savedIdea = idea))
     }
 
     fun updateIdea(idea: Idea) {
@@ -45,7 +45,7 @@ class EditIdeaViewModel @Inject constructor(
                         onError = { onError(it, "updating idea") }
                 )
 
-        postState(state.copy(isSaved = true))
+        postState(state.copy(savedIdea = idea))
     }
 
     //==========================================================================
