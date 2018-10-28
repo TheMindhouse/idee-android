@@ -15,6 +15,7 @@ import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.rxkotlin.subscribeBy
 import javax.inject.Inject
+import com.facebook.login.LoginResult
 
 
 /**
