@@ -1,9 +1,7 @@
 package io.mindhouse.idee.ui.auth
 
 import android.content.Context
-import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import io.mindhouse.idee.ExceptionHandler
 import io.mindhouse.idee.R
@@ -12,6 +10,7 @@ import io.mindhouse.idee.data.BoardsRepository
 import io.mindhouse.idee.data.model.Board
 import io.mindhouse.idee.di.qualifier.IOScheduler
 import io.mindhouse.idee.ui.base.BaseViewModel
+import io.mindhouse.idee.utils.asSingle
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.rxkotlin.subscribeBy
@@ -50,22 +49,16 @@ class AuthViewModel @Inject constructor(
     }
 
     fun onGoogleToken(task: Task<GoogleSignInAccount>) {
-        try {
-            val account = task.getResult(ApiException::class.java)
-            postState(AuthViewState(true, false, null))
-
-            val disposable = authorizeRepository.signInWithGoogle(account)
-                    .subscribeOn(ioScheduler)
-                    .flatMapCompletable { createBoardIfNecessary() }
-                    .subscribeBy(
-                            onComplete = ::onLoggedIn,
-                            onError = ::onError
-                    )
-            addDisposable(disposable)
-
-        } catch (e: ApiException) {
-            onError(e)
-        }
+        postState(AuthViewState(true, false, null))
+        val disposable = task.asSingle()
+                .subscribeOn(ioScheduler)
+                .flatMap { authorizeRepository.signInWithGoogle(it) }
+                .flatMapCompletable { createBoardIfNecessary() }
+                .subscribeBy(
+                        onComplete = ::onLoggedIn,
+                        onError = ::onError
+                )
+        addDisposable(disposable)
     }
 
     private fun createBoardIfNecessary(): Completable {
